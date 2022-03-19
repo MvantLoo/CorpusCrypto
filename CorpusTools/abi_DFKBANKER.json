@@ -1,0 +1,241 @@
+[
+    {
+        "stateMutability": "nonpayable",
+        "inputs": [
+            {
+                "name": "_factory",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "type": "address",
+                "name": "_bank",
+                "internalType": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_govToken",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "type": "address",
+                "name": "_weth"
+            }
+        ],
+        "type": "constructor"
+    },
+    {
+        "type": "event",
+        "name": "LogBridgeSet",
+        "inputs": [
+            {
+                "type": "address",
+                "indexed": true,
+                "name": "token",
+                "internalType": "address"
+            },
+            {
+                "name": "bridge",
+                "type": "address",
+                "internalType": "address",
+                "indexed": true
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "inputs": [
+            {
+                "name": "server",
+                "type": "address",
+                "internalType": "address",
+                "indexed": true
+            },
+            {
+                "type": "address",
+                "name": "token0",
+                "internalType": "address",
+                "indexed": true
+            },
+            {
+                "type": "address",
+                "name": "token1",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "internalType": "uint256",
+                "indexed": false,
+                "name": "amount0",
+                "type": "uint256"
+            },
+            {
+                "name": "amount1",
+                "internalType": "uint256",
+                "type": "uint256",
+                "indexed": false
+            },
+            {
+                "type": "uint256",
+                "indexed": false,
+                "name": "amountGovToken",
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false,
+        "name": "LogConvert",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "name": "OwnershipTransferred",
+        "inputs": [
+            {
+                "name": "previousOwner",
+                "type": "address",
+                "internalType": "address",
+                "indexed": true
+            },
+            {
+                "type": "address",
+                "name": "newOwner",
+                "internalType": "address",
+                "indexed": true
+            }
+        ],
+        "type": "event"
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "name": "bank",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "contract IUniswapV2Factory"
+            }
+        ],
+        "name": "factory",
+        "inputs": []
+    },
+    {
+        "name": "owner",
+        "stateMutability": "view",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "internalType": "address",
+                "type": "address"
+            }
+        ],
+        "type": "function"
+    },
+    {
+        "outputs": [],
+        "name": "renounceOwnership",
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "inputs": []
+    },
+    {
+        "type": "function",
+        "outputs": [],
+        "name": "transferOwnership",
+        "stateMutability": "nonpayable",
+        "inputs": [
+            {
+                "internalType": "address",
+                "type": "address",
+                "name": "newOwner"
+            }
+        ]
+    },
+    {
+        "name": "bridgeFor",
+        "type": "function",
+        "stateMutability": "view",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "bridge",
+                "type": "address",
+                "internalType": "address"
+            }
+        ]
+    },
+    {
+        "stateMutability": "nonpayable",
+        "type": "function",
+        "name": "setBridge",
+        "outputs": [],
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "type": "address",
+                "internalType": "address",
+                "name": "bridge"
+            }
+        ]
+    },
+    {
+        "stateMutability": "nonpayable",
+        "inputs": [
+            {
+                "type": "address",
+                "internalType": "address",
+                "name": "token0"
+            },
+            {
+                "type": "address",
+                "internalType": "address",
+                "name": "token1"
+            }
+        ],
+        "type": "function",
+        "name": "convert",
+        "outputs": []
+    },
+    {
+        "outputs": [],
+        "type": "function",
+        "inputs": [
+            {
+                "type": "address[]",
+                "internalType": "address[]",
+                "name": "token0"
+            },
+            {
+                "internalType": "address[]",
+                "name": "token1",
+                "type": "address[]"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "name": "convertMultiple"
+    }
+]

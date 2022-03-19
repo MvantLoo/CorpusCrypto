@@ -1,0 +1,38 @@
+{
+  "debug" : 0,
+  
+  "rpc": {
+    "harmonypokt": "https://harmony-0-rpc.gateway.pokt.network/",
+    "harmonyfuzz": "https://api.fuzz.fi/",
+    "harmonyone": "https://api.harmony.one/"
+  },
+
+  "callOptions": {
+    "harmony": { "gasPrice": 35000000000, "gasLimit": 5000000 }
+  },
+
+  "contract": {
+    "WONE": { "address": "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a" },
+
+    "JEWEL":             { "address": "0x72cb10c6bfa5624dd07ef608027e366bd690048f", "abi": "./abi_DFKJEWEL.json" },
+    "XJEWEL":            { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to BANK" },
+    "DFKQUEST":          { "address": "0x5100bd31b822371108a0f63dcfb6594b9919eaf4", "abi": "./abi_DFKQUEST.json" },
+    "DFKBANK":           { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to xJEWEL" },
+    "DFKBANKER":         { "address": "0x3685ec75ea531424bbe67db11e07013abeb95f1e", "abi": "./abi_DFKBANKER.json" },
+    "DFKMASTERGARDENER": { "address": "0xdb30643c71ac9e2122ca0341ed77d09d5f99f924", "abi": "./abi_DFKMASTERGARDENER.json" },
+    "DFKHERO":           { "address": "0x5f753dcdf9b1ad9aabc1346614d1f4746fd6ce5c" },
+    
+    "TRANQ":      { "address": "0xcf1709ad76a79d5a60210f23e81ce2460542a836", "abi": "./abi_TRANQ.json" },
+    "TRANQSTAKE": { "address": "0x55ae07bb8bae1501f9aebf35801b5699eae63bb7", "abi": "./abi_TRANQSTAKE.json" },
+
+    "VIPER":     { "address": "0xea589e93ff18b1a1f1e9bac7ef3e86ab62addc79", "abi": "./abi_VIPER.json" },
+    "VIPERSWAP": { "address": "0xf012702a5f0e54015362cbca26a26fc90aa832a3", "abi": "./abi_VIPERSWAP.json" }
+  },
+
+  "dfk_quests": [
+    { "address": "0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc", "name": "Fishing" },
+    { "address": "0x3132c76acF2217646fB8391918D28a16bD8A8Ef4", "name": "Foraging" },
+    { "address": "0x6FF019415Ee105aCF2Ac52483A33F5B43eaDB8d0", "name": "Jewel Mining" },
+    { "address": "0x0548214A0760a897aF53656F4b69DbAD688D8f29", "name": "WishingWell" }
+  ]
+}
