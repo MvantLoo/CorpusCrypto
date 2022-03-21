@@ -237,7 +237,6 @@ class CorpusTools {
 
 
 
-
   async show_balance(token) {
     token = String(token).toLowerCase()
     let TOKEN = String(token).toUpperCase()
