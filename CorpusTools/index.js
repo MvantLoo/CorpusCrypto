@@ -26,6 +26,8 @@ class CorpusTools {
     this.SUCCESS = this.GREEN
     this.INFO    = this.CYAN
 
+    this.delay = ms => new Promise(res => setTimeout(res, ms))
+
     try { // Read the config file
       if (DEBUG) console.log(this.INFO, '[CT main] Read config file')
       this.config = require("./config.json")
@@ -158,6 +160,8 @@ class CorpusTools {
       console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
       console.log("  Received: " + this.SUCCESS, unlocked.toFixed(3), 'VIPER')
       console.log("  Status: " + this.SUCCESS, receipt.status)
+      if (DEBUG) console.log(this.INFO, 'Wait for 10 seconds')
+      await this.delay(10000) // Wait 10 seconds
       return unlocked
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
@@ -282,8 +286,4 @@ class CorpusTools {
   
 }
 exports.CorpusTools = CorpusTools
-
-//let ethers, config, wallet // Required modules and files
-//let provider, signer, myaddress
-
 
