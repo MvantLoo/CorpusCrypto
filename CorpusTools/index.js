@@ -3,6 +3,8 @@
 
 */
 
+const { exec } = require("child_process")
+
 let DEBUG = 0 // 0=off 1=on
 if (DEBUG) console.log('\x1b[33m%s\x1b[0m', '[CT main] DEBUG is enabled by main.js')
 
@@ -28,6 +30,11 @@ class CorpusTools {
 
     this.delay = ms => new Promise(res => setTimeout(res, ms))
 
+    this.read_config()
+    this.read_ethers()
+    this.read_wallet()
+  }
+  read_config() {
     try { // Read the config file
       if (DEBUG) console.log(this.INFO, '[CT main] Read config file')
       this.config = require("./config.json")
@@ -42,18 +49,30 @@ class CorpusTools {
       process.exit(1)
     }
     this.DEBUG = DEBUG
-
+  }
+  read_ethers() {
     try { // Read module 'ethers'
       if (DEBUG) console.log(this.INFO, '[CT main] Read module `ethers`')
       ethers = require("ethers") // https://github.com/ethers-io/ethers.js
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
-      console.error(this.ERROR,'[CT main] ERROR: Module "ethers" not installed\n')
-      console.error('Run the following command to install the required modules:')
-      console.error(this.WARN,'cd CorpusTools; npm install; cd ..\n')
-      process.exit(1)
+      console.error(this.ERROR,'ERROR: Module "ethers" not installed')
+      console.error(this.WARN,'Installing the required modules...\n')
+      exec("cd CorpusTools; npm install; cd ..", (error,stdout,stderr) => {
+        if (error) {
+          console.log(`error: ${error.message}`)
+          process.exit(1)
+        }
+        if (stderr) {
+          console.log(`stderr: ${stderr}`)
+          process.exit(1)
+        }
+        console.log(`stdout: ${stdout}`)
+      })
+      setTimeout(function () { read_ethers() }, 10000) // Wait 10 seconds and retry
     }
-
+  }
+  read_wallet() {
     try { // Read the wallet
       if (DEBUG) console.log(this.INFO, '[CT main] Read wallet file')
       wallet = require("../wallet.json")
@@ -111,6 +130,8 @@ class CorpusTools {
     }
   }
   
+
+
   async viper_show() {
     console.log(this.INFO, '\nShow VIPER balance')
     try {
