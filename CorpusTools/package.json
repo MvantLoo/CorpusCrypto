@@ -1,26 +1,21 @@
 {
   "name": "corpus-tools",
-  "version": "1.0.0",
+  "version": "0.0.3",
   "description": "Tools of Corpus Crypto at the Block-Chain",
-  "main": "..",
   "dependencies": {
     "ethers": "^5.5.2"
   },
-  "scripts": {
-    "start": "node .",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/x/y"
+    "url": "https://github.com/MvantLoo/CorpusCrypto"
   },
   "engines": {
     "node": "^16.12.0"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Maurice van 't Loo",
+  "license": "GNU General Public License v3.0",
   "bugs": {
-    "url": "https://github.com/x/y/issues"
+    "url": "https://github.com/MvantLoo/CorpusCrypto/issues"
   },
-  "homepage": "https://github.com/x/y#readme"
+  "homepage": "https://github.com/MvantLoo/CorpusCrypto#readme"
 }
