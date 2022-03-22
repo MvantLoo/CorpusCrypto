@@ -130,8 +130,23 @@ class CorpusTools {
     }
   }
   
+  /******************
+  ***     ONE     ***
+  *******************/
+  async one_show() {
+    try {
+      console.log(this.INFO, '\nShow ONE balance')
+      console.log("  Balance: " + this.SUCCESS, Number(ethers.utils.formatEther(await signer.getBalance())).toFixed(3), "ONE")
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR,'ERROR: Problem to connect to the ONE contract')
+      process.exit(32)
+    }
+  }
 
-
+  /******************
+  ***    VIPER    ***
+  *******************/
   async viper_show() {
     console.log(this.INFO, '\nShow VIPER balance')
     try {
@@ -205,13 +220,16 @@ class CorpusTools {
         provider
       )
   
-      let path = [this.config.contract.VIPER.address,this.config.contract.WONE.address]
-      let amountIn = await ethers.utils.parseEther(viper.toString(10))
-      let amountOut = await VIPERSWAP.getAmountsOut(amountIn, path)
-          amountOut = Number(ethers.utils.formatEther(amountOut[1]))
+      let path = [this.config.contract.VIPER.address,this.config.contract.WONE.address] // From VIPER to WONE
+      let amountIn = await ethers.utils.parseEther(viper.toString(10)) // Amount of Viper as Hex/BigNumber
+      let amountOut = await VIPERSWAP.getAmountsOut(amountIn, path)    // Request contract about the estimated amount of ONE; [0]=VIPER [1]=WONE
+          amountOut = Number(ethers.utils.formatEther(amountOut[1]))   // Convert Hex/BigNumber of [1]=WONE
       console.log("  ONE: " + this.SUCCESS,  amountOut.toFixed(3), 'estimated')
-  
-      let amountOutMin = await ethers.utils.parseEther((amountOut*.9).toFixed(0).toString(10)) // 90% as minimum
+
+      let amountOutMin = (amountOut * 0.9).toFixed(3)  // 90% as minimum amount (10% slippage)
+      console.log("  ONE: " + this.SUCCESS,  amountOutMin, 'minimum')
+      amountOutMin = await ethers.utils.parseEther(amountOutMin) // Convert to Hex/BigNumber
+
       let to = myaddress
       let deadline = (Date.now() / 1000).toFixed(0) + 60 // Dead in 60 seconds
   
@@ -242,45 +260,8 @@ class CorpusTools {
     }
   }
 
-  async one_show() {
-    try {
-      console.log(this.INFO, '\nShow ONE balance')
-      console.log("  Balance: " + this.SUCCESS, Number(ethers.utils.formatEther(await signer.getBalance())).toFixed(3), "ONE")
-    } catch (err) {
-      if (DEBUG) console.error('\n', err, '\n')
-      console.error(this.ERROR,'ERROR: Problem to connect to the ONE contract')
-      process.exit(32)
-    }
-  }
+
   
-
-
-
-
-
-  async show_balance(token) {
-    token = String(token).toLowerCase()
-    let TOKEN = String(token).toUpperCase()
-    console.log(this.INFO, '\nShow ' + TOKEN + ' balance')
-    try {
-      // https://docs.ethers.io/v5/api/contract/contract/
-      let CONTRACT = new ethers.Contract(
-        this.config.contract[TOKEN].address,
-        require(this.config.contract[TOKEN].abi),
-        provider
-      )
-      console.log("  Balance: " + this.SUCCESS, Number(ethers.utils.formatEther(await CONTRACT.balanceOf(myaddress))).toFixed(3), 'TOKEN')
-      console.log("  Locked: " + this.SUCCESS, Number(ethers.utils.formatEther(await CONTRACT.lockOf(myaddress))).toFixed(3), 'TOKEN locked' )
-      console.log("  Unlockable: " + this.SUCCESS, Number(ethers.utils.formatEther(await CONTRACT.canUnlockAmount(myaddress))).toFixed(3), 'TOKEN can be unlocked' )
-    } catch (err) {
-      if (DEBUG) console.error('\n', err, '\n')
-      console.error(this.ERROR, 'ERROR: Problem to connect with VIPER contract')
-      process.exit(8)
-    }
-  }
-
-
-
 
 
 
