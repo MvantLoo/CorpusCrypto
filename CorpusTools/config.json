@@ -4,7 +4,7 @@
   "rpc": {
     "harmonypokt": "https://harmony-0-rpc.gateway.pokt.network/",
     "harmonyfuzz": "https://api.fuzz.fi/",
-    "harmonyone": "https://api.harmony.one/"
+    "harmonyone":  "https://api.harmony.one/"
   },
 
   "callOptions": {
@@ -24,6 +24,7 @@
     
     "TRANQ":      { "address": "0xcf1709ad76a79d5a60210f23e81ce2460542a836", "abi": "./abi_TRANQ.json" },
     "TRANQSTAKE": { "address": "0x55ae07bb8bae1501f9aebf35801b5699eae63bb7", "abi": "./abi_TRANQSTAKE.json" },
+    "TRANQLOCK":  { "address": "0xba20c40339bcda584985522da3f6e61c2cc1f96e", "abi": "./abi_TRANQLOCK.json" },
 
     "VIPER":     { "address": "0xea589e93ff18b1a1f1e9bac7ef3e86ab62addc79", "abi": "./abi_VIPER.json" },
     "VIPERSWAP": { "address": "0xf012702a5f0e54015362cbca26a26fc90aa832a3", "abi": "./abi_VIPERSWAP.json" }

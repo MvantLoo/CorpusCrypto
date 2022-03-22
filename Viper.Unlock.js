@@ -2,13 +2,8 @@
   ViperSwap Unlock locked tokens
   https://viper.exchange/#/staking/unlock
 
-  Version: ALPHA 2
+  Version: ALPHA 3 - 2022-03-22
 
-  Install required modules: 
-    npm install
-
-  Run this script:
-    node Viper.Unlock
 */
 
 let CT = require("./CorpusTools")
@@ -24,8 +19,8 @@ async function main() {
   await ct.viper_show()                            // Show VIPER balance
   unlocked = await ct.viper_unlock()               // Unlock the VIPER coins, returns the amount of unlocked VIPER
   balance = await ct.viper_show()                  // Show VIPER balance, returns the amount of VIPER
-  await ct.viper_swap(balance)                     // Swap the VIPER to ONE, choose if you want to swap what is unlocked, or all
-  await ct.one_show()                              // Show ONE balance
+  await ct.viper_swap(balance)                     // Swap the VIPER to ONE, choose if you want to swap what is unlocked, or VIPER balance
+  await ct.one_show()                              // Show ONE balance after the Swap
 }
 
 main()

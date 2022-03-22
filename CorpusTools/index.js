@@ -260,6 +260,63 @@ class CorpusTools {
     }
   }
 
+  /******************
+  ***    TRANQ    ***
+  *******************/
+  async tranq_show() {
+    console.log(this.INFO, '\nShow TRANQ balance')
+    try {
+      let TRANQ = new ethers.Contract(
+        this.config.contract.TRANQ.address,
+        require(this.config.contract.TRANQ.abi),
+        provider
+      )
+      if (DEBUG>1) console.log(this.INFO, 'TRANQ:', TRANQ, '\n')
+
+      let balance = Number(ethers.utils.formatEther(await TRANQ.balanceOf(myaddress)))
+          balance = Math.trunc(balance * 1000) / 1000 // Cut-off all numbers behind the last 3 digits
+      console.log("  Balance: " + this.SUCCESS, balance, 'TRANQ')
+
+      let TRANQLOCK = new ethers.Contract(
+        this.config.contract.TRANQLOCK.address,
+        require(this.config.contract.TRANQLOCK.abi),
+        provider
+      )
+      if (DEBUG>1) console.log(this.INFO, 'TRANQLOCK:', TRANQLOCK, '\n')
+
+      let rewardTokenCount = await TRANQLOCK.rewardTokenCount() // Total number of staking reward tokens
+      console.log("  13. rewardTokenCount: " + this.SUCCESS, rewardTokenCount)
+
+      let unlockedSupplyAmount = await TRANQLOCK.unlockedSupplyAmount() // The amount of unlocked tokens per user.
+      console.log("  19. unlockedSupplyAmount: " + this.SUCCESS, unlockedSupplyAmount)
+
+
+/*      let balance = Number(ethers.utils.formatEther(await TRANQ.balanceOf(myaddress)))
+          balance = Math.trunc(balance * 1000) / 1000 // Cut-off all numbers behind the last 3 digits
+      console.log("  Balance: " + this.SUCCESS, balance, 'TRANQ')
+
+      let 
+      let accruedReward = TRANQLOCK.accruedReward(a,i) // Unclaimed staking rewards per user and token - uint amount = accruedReward[msg.sender][i]; i = loop of 0 to rewardTokenCount
+      let lockedSupplies = TRANQLOCK.lockedSupplies(a,i) // Locked deposits of the staked token per user
+      let rewardIndex = TRANQLOCK.rewardIndex(i)
+      let rewardSpeeds = TRANQLOCK.rewardSpeeds(i)
+      let rewardTokenAddresses = TRANQLOCK.rewardTokenAddresses(i)
+      let supplierRewardIndex = TRANQLOCK.supplierRewardIndex(a,i)
+      let supplyAmount = TRANQLOCK.supplyAmount(a)
+      let unlockedSupplyAmount = TRANQLOCK.unlockedSupplyAmount(a) // The amount of unlocked tokens per user.
+      let getClaimableRewards = TRANQLOCK.getClaimableRewards(a,i)
+      let getLockedSupplies = TRANQLOCK.getLockedSupplies(a)
+      let getUnlockedBalance = TRANQLOCK.getUnlockedBalance(a)
+      let getLockedBalance = TRANQLOCK.getLockedBalance(a)
+*/
+
+      return balance
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with TRANQ contract')
+      process.exit(8)
+    }
+  }
 
   
 
