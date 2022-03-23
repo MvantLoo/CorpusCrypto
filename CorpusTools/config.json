@@ -35,5 +35,19 @@
     { "address": "0x3132c76acF2217646fB8391918D28a16bD8A8Ef4", "name": "Foraging" },
     { "address": "0x6FF019415Ee105aCF2Ac52483A33F5B43eaDB8d0", "name": "Jewel Mining" },
     { "address": "0x0548214A0760a897aF53656F4b69DbAD688D8f29", "name": "WishingWell" }
-  ]
+  ],
+
+  "token": { "case":"lowercase",
+    "0xcf1709ad76a79d5a60210f23e81ce2460542a836": { "name":"TRANQ" , "decimals":18 },
+    "0x3095c7557bcb296ccc6e363de01b760ba031f2d9": { "name":"1WBTC" , "decimals":8 },
+    "0x6983d1e6def3690c4d616b13597a09e6193ea013": { "name":"1ETH" , "decimals":18 },
+    "0x985458e523db3d53125813ed68c274899e9dfab4": { "name":"1USDC" , "decimals":6 },
+    "0x3c2b8be99c50593081eaa2a724f0b8285f5aba8f": { "name":"1USDT" , "decimals":6 },
+    "0x22d62b19b7039333ad773b7185bb61294f3adc19": { "name":"stONE" , "decimals":18 },
+    "0x2a719af848bf365489e548be5edbec1d65858e59": { "name":"FIRA" , "decimals":18 },
+    "0xef977d2f931c1978db5f6747666fa1eacb0d0339": { "name":"1DAI" , "decimals":18 },
+    "x0xdc54046c0451f9269fee1840aec808d36015697d": { "name":"ONE TAX" , "decimals":0 }
+    
+
+  }
 }

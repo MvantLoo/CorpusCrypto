@@ -17,8 +17,8 @@ console.log(ct.displayDateTime(Date.now()))
 
 async function main() {  
   await ct.connect_provider_signer("harmonypokt")  // Connect to Harmony and show ONE balance
-  await ct.tranq_show()                            // Show TRANQ balance
-//  await ct.tranq_locked_claim()                    // Claim from Locked TRANQ Staking
+//  await ct.tranq_show()                            // Show TRANQ balance
+  await ct.tranq_locked_claim()                    // Claim from Locked TRANQ Staking
 //  await ct.defira_show_FIRA()                      // Show FIRA balance
 //  await ct.defira_harvest()                        // Harvest Defira Farms
 //  await ct.defira_swap_FIRA_ONE()                  // Swap FIRA tokens to ONE

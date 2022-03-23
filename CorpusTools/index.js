@@ -284,8 +284,22 @@ class CorpusTools {
       )
       if (DEBUG>1) console.log(this.INFO, 'TRANQLOCK:', TRANQLOCK, '\n')
 
+      for(let i=0; i<10; i++){
+        let getClaimableRewards = await TRANQLOCK.getClaimableRewards(myaddress, i) 
+        console.log("  getClaimableRewards " + i + ": " + this.SUCCESS, getClaimableRewards)
+      }
+
+/*      for(let i=0; i<10; i++){
+        let lockedSupplies = await TRANQLOCK.lockedSupplies(myaddress, i) // Locked deposits of the staked token per user
+        console.log("  07. lockedSupplies " + i + ": " + this.SUCCESS, lockedSupplies)
+      }
+*/
+
       let rewardTokenCount = await TRANQLOCK.rewardTokenCount() // Total number of staking reward tokens
       console.log("  13. rewardTokenCount: " + this.SUCCESS, rewardTokenCount)
+
+      let getLockedSupplies = await TRANQLOCK.getLockedSupplies(myaddress) // Gets the individual locked deposit data.
+      console.log("  21. getLockedSupplies: " + this.SUCCESS, getLockedSupplies)
 
       let unlockedSupplyAmount = await TRANQLOCK.unlockedSupplyAmount() // The amount of unlocked tokens per user.
       console.log("  19. unlockedSupplyAmount: " + this.SUCCESS, unlockedSupplyAmount)
@@ -312,13 +326,53 @@ class CorpusTools {
 
       return balance
     } catch (err) {
-      if (DEBUG) console.error('\n', err, '\n')
-      console.error(this.ERROR, 'ERROR: Problem to connect with TRANQ contract')
+      if (true) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with TRANQLOCK contract')
+      console.error(err.code, '-', err.reason)
       process.exit(8)
     }
   }
 
+  async tranq_locked_claim() {
+    console.log(this.INFO, '\nClaim from Locked Staking')
+    // 0x372500ab
+    console.log(this.WARN, '  Patience...')
+    try {
+      let response = await signer.sendTransaction({
+        to: this.config.contract.TRANQSTAKE.address,
+        data: '0x372500ab' // 4. claimRewards
+      }, this.config.callOptions.harmony)
+      if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+
+      console.log("  Nonce: " + this.SUCCESS, response.nonce)
   
+      let receipt = await response.wait()
+      if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
+      console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+
+      for (let log in receipt.logs) {
+        log = receipt.logs[log]
+        let address =  log.address.toLowerCase()
+        let name, decimals
+        try {
+          name =     this.config.token[address].name
+          decimals = this.config.token[address].decimals
+          console.log(this.SUCCESS, Number(ethers.utils.formatEther(log.data, decimals)).toFixed(18), name)
+        } catch (err) {
+          if (address != "0xdc54046c0451f9269fee1840aec808d36015697d") { // Filter known address what should be hidden
+            console.log("    " + this.SUCCESS, ethers.utils.formatEther(log.data, 0), address)
+          }
+          
+        }
+      } 
+      if (DEBUG) console.log(this.WARN, '  Wait for 10 seconds...')
+      await this.delay(10000) // Wait 10 seconds
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with contract')
+      process.exit(8)
+    }
+  }
 
 
 
