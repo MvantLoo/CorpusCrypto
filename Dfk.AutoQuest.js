@@ -30,7 +30,7 @@ async function loop() {
   console.log(ct.displayDateTime(Date.now()))
 
   await ct.dfk_show_quests()  // Show info about active quests
-  await ct.dfk_stop_quests()  // Stop any finished quests   
+  await ct.dfk_stop_quests()  // Stop any completed quests   
   //await ct.dfk_start_quest_forager(forager_heroes) // Start a new Forager Quest if all assigned heroes are available and above 7 Stamina
   //await ct.dfk_start_quest_fisher(fisher_heroes)   // Start a new Fisher Quest if all assigned heroes are available and above 7 Stamina
   //setTimeout(() => loop(), "10000"); // 300000 = 5 minute break, then restart
