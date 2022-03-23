@@ -374,19 +374,109 @@ class CorpusTools {
     }
   }
 
+  /*************************
+  ***    DefiKingdoms    ***
+  **************************/
 
+  async dfk_show_quests() {
+    console.log(this.INFO, '\nShow DefiKingdoms Quests')
+    try {
+      let DFKQUEST = new ethers.Contract(
+        this.config.contract.DFKQUEST.address,
+        require(this.config.contract.DFKQUEST.abi),
+        provider
+      )
+      if (DEBUG>1) console.log(this.INFO, 'DFKQUEST:', DFKQUEST, '\n')
 
+      let quests = await DFKQUEST.getActiveQuests(myaddress)
+      if (DEBUG) console.log(this.INFO, "Quests:", quests, '\n') 
+
+      quests.forEach( (q) => {
+        let quest
+        try {
+          quest = this.config.dfk_quests[q.quest.toLowerCase()] // Try to translate to a name
+        } catch (err) {
+          quest = q.quest // Unknown quest name
+        }
+        let heroes = ""
+        q.heroes.forEach( (h) => {
+          heroes += h + " "
+        })
+        console.log("  Quest:       " + this.SUCCESS, quest)
+        console.log("  Heroes:      " + this.SUCCESS, heroes)
+        console.log("  Start time:  " + this.SUCCESS, this.displayTime(q.startTime * 1000))
+        console.log("  Finished at: " + this.SUCCESS, this.displayTime(q.completeAtTime * 1000))
+        console.log("  Attemps:     " + this.SUCCESS, q.attempts)
+        console.log("  Status:      " + this.SUCCESS, q.status, '\n')
+      })
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with contract')
+      process.exit(8)
+    }
+  }
+
+  async dfk_stop_quests() { DEBUG=1
+    console.log(this.INFO, '\nStop finished DefiKingdoms Quests')
+    try {
+      let DFKQUEST = new ethers.Contract(
+        this.config.contract.DFKQUEST.address,
+        require(this.config.contract.DFKQUEST.abi),
+        provider
+      )
+      let DFKQUESTsigner = await DFKQUEST.connect(signer)
+      if (DEBUG>1) console.log(this.INFO, 'DFKQUEST:', DFKQUEST, '\n')
+
+      let quests = await DFKQUEST.getActiveQuests(myaddress)
+      //if (DEBUG) console.log(this.INFO, "getActiveQuests:", quests, '\n') 
+      
+      let finished = quests.filter(
+        (quest) => quest.completeAtTime < Math.round(Date.now() / 1000)
+      )
+
+//      finished.forEach( (q) => {
+      for (let q in finished) { q = finished[q]
+        if (DEBUG) console.log(this.INFO, "To finish:", quests, '\n')
+        let quest
+        try {
+          quest = this.config.dfk_quests[q.quest.toLowerCase()] // Try to translate to a name
+        } catch (err) {
+          quest = q.quest // Unknown quest name
+        }
+        let heroes = ""
+        q.heroes.forEach( (h) => {
+          heroes += h + " "
+        })
+        console.log("  Quest:       " + this.SUCCESS, quest)
+        console.log("  Heroes:      " + this.SUCCESS, heroes)
+        console.log("  Finished at: " + this.SUCCESS, this.displayTime(q.completeAtTime * 1000))
+        console.log(this.WARN,"  Finishing, patience...")
+
+        let response = await DFKQUESTsigner.completeQuest(q.heroes[0], this.config.callOptions.harmony)
+        if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+        console.log("  Nonce: " + this.SUCCESS, response.nonce)
+
+        let receipt = await response.wait()
+        if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
+        console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+      }
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with contract')
+      process.exit(8)
+    }
+  }
 
 
   displayTime(timestamp) {
-    var a = new Date(timestamp)
+    var a = new Date(Number(timestamp))
     var hour = "00" + a.getHours()
     var min = "00" + a.getMinutes()
     var sec = "00" + a.getSeconds()
     return hour.slice(-2) + ":" + min.slice(-2) + ":" + sec.slice(-2)
   }
   displayDate(timestamp) {
-    var a = new Date(timestamp)
+    var a = new Date(Number(timestamp))
     var day = "00" + a.getDate()
     var month = "00" + (a.getMonth() + 1)
     var year = "0000" + a.getFullYear()

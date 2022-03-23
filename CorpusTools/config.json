@@ -30,14 +30,14 @@
     "VIPERSWAP": { "address": "0xf012702a5f0e54015362cbca26a26fc90aa832a3", "abi": "./abi_VIPERSWAP.json" }
   },
 
-  "dfk_quests": [
-    { "address": "0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc", "name": "Fishing" },
-    { "address": "0x3132c76acF2217646fB8391918D28a16bD8A8Ef4", "name": "Foraging" },
-    { "address": "0x6FF019415Ee105aCF2Ac52483A33F5B43eaDB8d0", "name": "Jewel Mining" },
-    { "address": "0x0548214A0760a897aF53656F4b69DbAD688D8f29", "name": "WishingWell" }
-  ],
+  "dfk_quests": {"case":"lowercase",
+    "0xe259e8386d38467f0e7ffedb69c3c9c935dfaefc": "Fishing",
+    "0x3132c76acf2217646fb8391918d28a16bd8a8ef4": "Foraging",
+    "0x6ff019415ee105acf2ac52483a33f5b43eadb8d0": "Jewel Mining",
+    "0x0548214a0760a897af53656f4b69dbad688d8f29": "WishingWell"
+  },
 
-  "token": { "case":"lowercase",
+  "token": {"case":"lowercase",
     "0xcf1709ad76a79d5a60210f23e81ce2460542a836": { "name":"TRANQ" , "decimals":18 },
     "0x3095c7557bcb296ccc6e363de01b760ba031f2d9": { "name":"1WBTC" , "decimals":8 },
     "0x6983d1e6def3690c4d616b13597a09e6193ea013": { "name":"1ETH" , "decimals":18 },
