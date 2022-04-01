@@ -1,0 +1,65 @@
+[
+  {
+    "name": "getAmountsOut",
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "type": "uint256",
+        "name": "amountIn"
+      },
+      {
+        "internalType": "address[]",
+        "type": "address[]",
+        "name": "path"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256[]",
+        "name": "amounts",
+        "internalType": "uint256[]"
+      }
+    ]
+  },
+  {
+    "name": "swapExactTokensForETH",
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "type": "uint256",
+        "name": "amountIn"
+      },
+      {
+        "name": "amountOutMin",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "type": "address[]",
+        "internalType": "address[]",
+        "name": "path"
+      },
+      {
+        "type": "address",
+        "internalType": "address",
+        "name": "to"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256[]",
+        "name": "amounts",
+        "internalType": "uint256[]"
+      }
+    ]
+  }
+]

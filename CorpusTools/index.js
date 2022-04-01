@@ -374,10 +374,9 @@ class CorpusTools {
     }
   }
 
-  /*************************
-  ***    DefiKingdoms    ***
-  **************************/
-
+  /*********************
+  ***    DFK - SD    ***
+  **********************/
   async dfk_show_quests() {
     console.log(this.INFO, '\nShow DefiKingdoms Quests')
     try {
@@ -466,6 +465,286 @@ class CorpusTools {
       process.exit(8)
     }
   }
+
+  /*********************
+  ***    DFK - CV    ***
+  **********************/
+  async dfkcv_harvest() {
+    console.log(this.INFO, '\nDFK Crystalvale Harvest')
+    try{
+      /* 0x5eac6239 claimRewards(uint256[])
+      0000000000000000000000000000000000000000000000000000000000000020
+      0000000000000000000000000000000000000000000000000000000000000001
+      0000000000000000000000000000000000000000000000000000000000000000 */
+      let response = await signer.sendTransaction({
+        to: this.config.contract.DFKCHAIN.GARDEN.address,
+        data: '0x5eac6239000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000'
+      }, this.config.callOptions.dfk)
+      console.log("  Nonce: " + this.SUCCESS, response.nonce)
+      if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+
+      let receipt = await response.wait()
+      if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
+      console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with contract')
+      process.exit(8)
+    }
+  }
+
+  async dfkcv_poolinfo() {
+    console.log(this.INFO, '\nDFK Crystalvale Poolinfo')
+    try {
+      /* 0x081e3eda poolLength()
+      0x0000000000000000000000000000000000000000000000000000000000000001 */
+      let poolLength = await provider.call({
+        to: this.config.contract.DFKCHAIN.GARDEN.address,
+        data: '0x081e3eda'
+      }) // 0x0000000000000000000000000000000000000000000000000000000000000001
+      poolLength = ethers.utils.formatUnits(poolLength,0)
+
+      /* 0x1526fe27 poolInfo(var arg0) returns (var arg0, var r1, var r2, var r3) 
+      0x1526fe27
+      0000000000000000000000000000000000000000000000000000000000000000
+      0x
+      0000000000000000000000006ac38a4c112f125eac0ebdbadbed0bc8f4575d0d
+      0000000000000000000000000000000000000000000000000000000000002710
+      000000000000000000000000000000000000000000000000000000006246dc8c
+      00000000000000000000000000000000000000000000000000000015955c9792 */
+      for (let poolID = 0; poolID < poolLength; poolID++) {
+        let cmd = '0x1526fe27'
+        poolID = ethers.utils.hexlify(poolID) // Change to hex
+        poolID = ethers.utils.hexZeroPad(poolID,32) // Change to 32 byte
+        let data = ethers.utils.hexConcat([cmd,poolID])
+        if (DEBUG) console.log(this.INFO, 'Data: ', data)
+
+        let response = await provider.call({
+          to: this.config.contract.DFKCHAIN.GARDEN.address,
+          data: data
+        })
+        response = response.substring(2).match(/.{64}/g) // Skip 0x and split in 4 words
+        if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+
+        let addr,pool
+        addr = '0x' + response[0].substring(24) // Make to look like an address
+        addr = ethers.utils.getAddress(addr.toLowerCase()) // Validate the cases to be an address
+
+        try { // See if the pool name is known
+          pool = this.config.pool[addr].name
+        } catch (err) { // If not, then use the address as name
+          pool = addr
+        } 
+
+        console.log("  Pool:   " + this.SUCCESS, pool)
+        console.log("    nr1:   " + this.SUCCESS, ethers.utils.formatUnits('0x'+response[1],0))
+        console.log("    nr2:   " + this.SUCCESS, ethers.utils.formatUnits('0x'+response[2],0))
+        console.log("    nr3:   " + this.SUCCESS, ethers.utils.formatUnits('0x'+response[3],0))
+      
+      }
+/*
+console.log("poolLength:", poolLength)
+      let cmd = '0x1526fe27'
+      let pool = '0x0000000000000000000000000000000000000000000000000000000000000000' 
+      //ethers.utils.getAddress('0x6AC38A4C112F125eac0eBDbaDBed0BC8F4575d0d'.toLowerCase()) // Check/convert valid address cases
+      let data = ethers.utils.hexConcat([cmd,pool])
+console.log(data)
+      let response = await provider.call({
+        to: this.config.contract.DFKCVGARDEN.address,
+        data: data
+      })
+      if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+
+*/
+    } catch (err) { // If not, then use the address as name
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with contract')
+      process.exit(8)
+    }
+  }
+
+  async dfkcv_userinfo() { DEBUG=1
+    console.log(this.INFO, '\nDFK Crystalvale Userinfo')
+    /* 0x93f1a40b userInfo(var arg0) returns (var arg0, var r1, var r2, var r3, var r4, var r5, var r6)
+    0x93f1a40b
+    */
+    let cmd = '0x93f1a40b'
+    let addr = ethers.utils.hexZeroPad(0,32) // Change to 32 byte
+    let extra = ethers.utils.hexZeroPad(0,32) // Change to 32 byte
+   // let addr = ethers.utils.hexZeroPad('0x6AC38A4C112F125eac0eBDbaDBed0BC8F4575d0d',32) // Change to 32 byte
+    let data = ethers.utils.hexConcat([cmd,addr,extra])
+
+    if (DEBUG) console.log(this.INFO, 'data:', data, '\n')
+    let response = await provider.call({
+      to: this.config.contract.DFKCHAIN.GARDEN.address,
+      data: cmd
+    })
+    response = response.substring(2).match(/.{64}/g) // Skip 0x and split in 4 words
+    if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+  }
+
+  async dfkcv_show(token) {
+    console.log(this.INFO, '\nDFK Crystalvale balance of', token)
+    try {
+      let addr,data,response
+      let total,locked,unlocked
+      // 0x70a08231 balanceOf(address)
+      // 0x4b0ee02a totalBalanceOf(address)
+      addr = ethers.utils.hexZeroPad(myaddress,32) // Change to 32 byte
+
+      try { // total is not always available
+        data = ethers.utils.hexConcat(['0x4b0ee02a',addr]) // totalBalanceOf
+        response = await provider.call({
+          to: this.config.contract.DFKCHAIN[token].address,
+          data: data
+        })
+        if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+        total = Number(ethers.utils.formatEther(response))
+      } catch {
+        total = 0
+      }
+
+      data = ethers.utils.hexConcat(['0x70a08231',addr]) // balanceOf
+      response = await provider.call({
+        to: this.config.contract.DFKCHAIN[token].address,
+        data: data
+      })
+      if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+      unlocked = Number(ethers.utils.formatEther(response))
+
+      if (total > 0) {
+        locked = total - unlocked
+        console.log("  Total:    " + this.SUCCESS, total.toFixed(3), token)
+        console.log("  Locked:   " + this.SUCCESS, locked.toFixed(3), token)
+        console.log("  Unlocked: " + this.SUCCESS, unlocked.toFixed(3), token)
+      } else {
+        console.log("  Balance: " + this.SUCCESS, unlocked.toFixed(3), token)
+      }
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Unknown token', token)
+      process.exit(8)
+    }
+  }
+
+  async dfkcv_swap(token1,token2,amount) { 
+    console.log(this.INFO, '\nDFK Crystalvale swap', amount, token1, 'to', token2)
+    let SWAPROUTER, SIGNER, TOKEN1, TOKEN2
+    let balance, amountIn, amountOutMin, path 
+  
+    try { // Connect with the contracts
+      SWAPROUTER = new ethers.Contract( 
+        this.config.contract.DFKCHAIN.SWAPROUTER.address, 
+        require(this.config.contract.DFKCHAIN.SWAPROUTER.abi), provider 
+      )
+      SIGNER = await SWAPROUTER.connect(signer)
+      TOKEN1 = new ethers.Contract( 
+        this.config.contract.DFKCHAIN[token1].address, 
+        require(this.config.contract.DFKCHAIN[token1].abi), provider 
+      )
+      TOKEN2 = new ethers.Contract( 
+        this.config.contract.DFKCHAIN[token2].address, 
+        require(this.config.contract.DFKCHAIN[token2].abi), provider 
+      )
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
+      process.exit(8)
+    }
+
+    try { // Get balance of Token1
+      balance = await TOKEN1.balanceOf(myaddress)
+      balance = Number(ethers.utils.formatEther(balance))
+      balance = Math.trunc(balance * 1000) / 1000 // Keep max 3 digits
+      console.log("  Balance 1: " + this.SUCCESS, balance.toFixed(3), token1)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with the contract of', token1)
+      process.exit(8)
+    }
+
+    try { // Get balance of Token2
+      let balance2 
+      if ( token2 == "JEWEL" ) {
+        balance2 = await signer.getBalance()
+      } else {
+        balance2 = await TOKEN2.balanceOf(myaddress)
+      }
+      balance2 = Number(ethers.utils.formatEther(balance2))
+      balance2 = Math.trunc(balance2 * 1000) / 1000 // Keep max 3 digits
+      console.log("  Balance 2: " + this.SUCCESS, balance2.toFixed(3), token2)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with the contract of', token2)
+      process.exit(8)
+    }
+
+    try { // Check amount
+      let all
+      if (isNaN(amount)) { // Make sure the value is a number
+        if (amount.toLowerCase() == "all") { all = true } else { all = false } 
+        amount = 0
+      } 
+      amount = Number(amount) // Make sure the value is a number (if not ALL)
+
+      if ( !all && amount <= 0 ) { // Is there is nothing to swap, we can abort
+        console.log(this.WARN, 'WARNING', 'Nothing to swap, amount is', amount)
+        return
+      }
+
+      // If amount is ALL or if amount > balance, then use all (amount = balance)
+      if ( all || amount > balance) { all = true; amount = balance }
+      
+      console.log("  Amount to swap: " + this.SUCCESS, amount, token1)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to the amount', amount)
+      process.exit(8)
+    }
+    
+    try { // Find amountOutMin
+      path = [ this.config.contract.DFKCHAIN[token1].address, this.config.contract.DFKCHAIN[token2].address ]
+      amountIn = ethers.utils.parseEther(amount.toString(10))
+
+      let amountOut = await SWAPROUTER.getAmountsOut(amountIn, path)
+      amountOut = Number(ethers.utils.formatEther(amountOut[1]))
+      amountOutMin = (amountOut * 0.9).toFixed(3)  // 90% as minimum amount (10% slippage)
+
+      if (DEBUG) console.log(this.INFO, 'amountOut:', amountOut.toFixed(3))
+      if (DEBUG) console.log(this.INFO, 'amountOutMin:', amountOutMin)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to find the minimum of', token2)
+      process.exit(8)
+    }
+
+    try { // Swap the tokens
+      console.log(this.WARN, '  Start swapping, patience...')
+      let deadline = (Date.now() / 1000).toFixed(0) + 60 // Dead in 60 seconds
+      amountOutMin = ethers.utils.parseEther(amountOutMin.toString(10))
+      let response = await SIGNER.swapExactTokensForETH(amountIn,amountOutMin,path,myaddress,deadline,this.config.callOptions.dfk)
+      if (DEBUG>1) console.log(this.INFO, 'response:', response, '\n')
+      console.log("  Nonce: " + this.SUCCESS, response.nonce)
+  
+      let receipt = await response.wait()
+      if (DEBUG>1) console.log(this.INFO, 'receipt:', receipt, '\n')
+
+      let swapped = receipt.logs
+      swapped = swapped.filter(  (item) => item.address == this.config.contract.DFKCHAIN[token2].address  )
+      swapped = swapped[0].data
+      swapped = await ethers.utils.formatEther(swapped)
+      swapped = Number(swapped).toFixed(3)
+
+      console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+      console.log("  Received: " + this.SUCCESS, swapped, token2)
+      console.log("  Status: " + this.SUCCESS, receipt.status)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to the tokens')
+      process.exit(8)
+    }
+  }
+
 
 
   displayTime(timestamp) {

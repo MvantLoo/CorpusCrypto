@@ -1,0 +1,23 @@
+[
+  {
+    "name": "balanceOf",
+    "type": "function",
+    "stateMutability": "view",
+    "constant": true,
+    "payable": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "type": "address",
+        "name": "account"
+      }
+    ],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ]
+  }
+]
