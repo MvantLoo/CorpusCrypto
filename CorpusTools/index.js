@@ -486,6 +486,7 @@ class CorpusTools {
       let receipt = await response.wait()
       if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
       console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+      return 
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
       console.error(this.ERROR, 'ERROR: Problem to connect with contract')
@@ -653,7 +654,11 @@ console.log(data)
     }
 
     try { // Get balance of Token1
-      balance = await TOKEN1.balanceOf(myaddress)
+      if ( token1 == "JEWEL" ) {
+        balance = await signer.getBalance()
+      } else {
+        balance = await TOKEN1.balanceOf(myaddress)
+      }
       balance = Number(ethers.utils.formatEther(balance))
       balance = Math.trunc(balance * 1000) / 1000 // Keep max 3 digits
       console.log("  Balance 1: " + this.SUCCESS, balance.toFixed(3), token1)
@@ -745,7 +750,25 @@ console.log(data)
     }
   }
 
+  async dfkcv_jeweler_airdrop() {
+    console.log(this.INFO, '\nDFK Crystalvale Claim airdrops')
+    /*  0x123165B3a30fdA3655B30cfC10135C1CA3C21bFC
+    0x379607f5 - Claim
+    00000000000000000000000000000000000000000000000001058aa9ea74cbb2 - Amount of vested xCrystals
+    */
 
+
+
+    let addr = ethers.utils.hexZeroPad(myaddress,32) // Change to 32 byte
+    let data = ethers.utils.hexConcat(['0xb13e4a9d',addr]) // totalVested(address)
+    console.log(this.INFO, 'data:', data, '\n')
+    let response = await provider.call({
+      to: this.config.contract.DFKCHAIN.PROXY.address,
+      data: data
+    })
+    console.log(this.INFO, 'response:', response, '\n')
+    process.exit()
+  }
 
   displayTime(timestamp) {
     var a = new Date(Number(timestamp))
