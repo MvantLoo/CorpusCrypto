@@ -1,6 +1,5 @@
 [
-  {
-    "name": "getAmountsOut",
+  { "name": "getAmountsOut",
     "type": "function",
     "stateMutability": "view",
     "inputs": [
@@ -23,8 +22,7 @@
       }
     ]
   },
-  {
-    "name": "swapExactTokensForETH",
+  { "name": "swapExactTokensForETH",
     "type": "function",
     "stateMutability": "nonpayable",
     "inputs": [
@@ -60,6 +58,77 @@
         "name": "amounts",
         "internalType": "uint256[]"
       }
+    ]
+  },
+  { "name": "swapExactTokensForTokens",
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "inputs": [
+        {
+            "name": "amountIn",
+            "internalType": "uint256",
+            "type": "uint256"
+        },
+        {
+            "type": "uint256",
+            "internalType": "uint256",
+            "name": "amountOutMin"
+        },
+        {
+            "internalType": "address[]",
+            "name": "path",
+            "type": "address[]"
+        },
+        {
+            "name": "to",
+            "type": "address",
+            "internalType": "address"
+        },
+        {
+            "name": "deadline",
+            "type": "uint256",
+            "internalType": "uint256"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "amounts",
+            "type": "uint256[]",
+            "internalType": "uint256[]"
+        }
+    ]
+  },
+  { "name": "swapExactETHForTokens",
+    "type": "function",
+    "stateMutability": "payable",
+    "inputs": [
+        {
+            "type": "uint256",
+            "internalType": "uint256",
+            "name": "amountOutMin"
+        },
+        {
+            "internalType": "address[]",
+            "name": "path",
+            "type": "address[]"
+        },
+        {
+            "name": "to",
+            "internalType": "address",
+            "type": "address"
+        },
+        {
+            "type": "uint256",
+            "name": "deadline",
+            "internalType": "uint256"
+        }
+    ],
+    "outputs": [
+        {
+            "type": "uint256[]",
+            "name": "amounts",
+            "internalType": "uint256[]"
+        }
     ]
   }
 ]

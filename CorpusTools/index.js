@@ -471,7 +471,7 @@ class CorpusTools {
   /*********************
   ***    DFK - CV    ***
   **********************/
-  async dfkcv_harvest() { DEBUG=1
+  async dfkcv_harvest() { 
     console.log(this.INFO, '\nDFK Crystalvale Harvest')
     try{
       /* 0x5eac6239 claimRewards(uint256[])
@@ -729,7 +729,15 @@ console.log(data)
       console.log(this.WARN, '  Start swapping, patience...')
       let deadline = (Date.now() / 1000).toFixed(0) + 60 // Dead in 60 seconds
       amountOutMin = ethers.utils.parseEther(amountOutMin.toString(10))
-      let response = await SIGNER.swapExactTokensForETH(amountIn,amountOutMin,path,myaddress,deadline,this.config.callOptions.dfk)
+
+      let response
+      if ( token1 == "JEWEL" ) {swapExactETHForTokens
+        response = await SIGNER.swapExactETHForTokens(amountIn,amountOutMin,path,myaddress,deadline,this.config.callOptions.dfk)
+      } else if ( token2 == "JEWEL" ) {
+        response = await SIGNER.swapExactTokensForETH(amountIn,amountOutMin,path,myaddress,deadline,this.config.callOptions.dfk)
+      } else {
+        response = await SIGNER.swapExactTokensForTokens(amountIn,amountOutMin,path,myaddress,deadline,this.config.callOptions.dfk)
+      }
       if (DEBUG>1) console.log(this.INFO, 'response:', response, '\n')
       console.log("  Nonce: " + this.SUCCESS, response.nonce)
   

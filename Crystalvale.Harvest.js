@@ -15,7 +15,7 @@ console.log(ct.displayDateTime(Date.now()))
 async function main() {  
   await ct.connect_provider_signer("dfkpokt")     // Connect to DFK-Chain and show JEWEL balance
   await ct.dfkcv_harvest()                        // Harvest the rewards
-  await ct.dfkcv_swap("CRYSTAL", "JEWEL", "ALL")  // Swap all crystal to jewel tokens
+  await ct.dfkcv_swap("CRYSTAL", "USDC", "ALL")   // Swap all crystal to USDC tokens
 }
 
 main()

@@ -1,5 +1,9 @@
 # DFK Found Info - https://game.defikingdoms.com/
 
+- Inspect - Sources https://game.defikingdoms.com - static - js - assets - images
+
+- Inspect - Sources https://game.defikingdoms.com - static - js - constants - abis
+
 - Inspect - Sources https://game.defikingdoms.com - static - js - constants - index.ts
   - `export const HEROCORE_ADDRESSES:` 
     - `[ChainId.HARMONY_MAINNET]: '0x5F753dcDf9b1AD9AabC1346614D1f4746fd6Ce5C'`
