@@ -37,7 +37,8 @@
 
 - Inspect - Sources https://game.defikingdoms.com - static - js - constants - staking.ts
   - Pools with pid
-    ```[ChainId.HARMONY_MAINNET]: [
+    ```
+    [ChainId.HARMONY_MAINNET]: [
       pid: 0,      tokens: getPairTokensWithDefaults(ChainId.HARMONY_MAINNET, 'JEWEL/WONE'),
       pid: 1,      tokens: getPairTokensWithDefaults(ChainId.HARMONY_MAINNET, 'JEWEL/BUSD'),
       pid: 2,      tokens: getPairTokensWithDefaults(ChainId.HARMONY_MAINNET, 'JEWEL/bscBNB'),
@@ -57,9 +58,9 @@
       pid: 16,      tokens: getPairTokensWithDefaults(ChainId.HARMONY_MAINNET, 'JEWEL/FTM'),
       pid: 17,      tokens: getPairTokensWithDefaults(ChainId.HARMONY_MAINNET, 'JEWEL/LUNA'),
       pid: 18,      tokens: getPairTokensWithDefaults(ChainId.HARMONY_MAINNET, 'JEWEL/WMATIC'),
-[ChainId.BSC_TESTNET]: [
+    [ChainId.BSC_TESTNET]: [
       pid: 0,      tokens: getPairTokensWithDefaults(ChainId.BSC_TESTNET, 'JEWEL/WONE'),
-[ChainId.DFK_MAINNET]: [
+    [ChainId.DFK_MAINNET]: [
       pid: 0,      tokens: getPairTokensWithDefaults(ChainId.DFK_MAINNET, 'XJEWEL/WJEWEL'),
       pid: 1,      tokens: getPairTokensWithDefaults(ChainId.DFK_MAINNET, 'CRYSTAL/AVAX'),
       pid: 2,      tokens: getPairTokensWithDefaults(ChainId.DFK_MAINNET, 'CRYSTAL/WJEWEL'),
