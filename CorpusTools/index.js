@@ -128,6 +128,8 @@ class CorpusTools {
       console.error(this.ERROR,'ERROR: Problem to connect the Wallet/Signer\n')
       process.exit(4)
     }
+
+    if (this.config.debug) { DEBUG = 1 } // In case in the mainscript Debug is set, start DEBUG after connection is done
   }
   
   /******************
@@ -469,7 +471,7 @@ class CorpusTools {
   /*********************
   ***    DFK - CV    ***
   **********************/
-  async dfkcv_harvest() {
+  async dfkcv_harvest() { DEBUG=1
     console.log(this.INFO, '\nDFK Crystalvale Harvest')
     try{
       /* 0x5eac6239 claimRewards(uint256[])
