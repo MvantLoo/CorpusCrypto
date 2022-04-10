@@ -81,10 +81,12 @@ class CorpusTools {
       console.error(this.ERROR,'ERROR: File "wallet.json" is missing.')
       const fs = require('fs')
       if (DEBUG) console.log(this.INFO, '[CT main] Create wallet file')
-      fs.writeFileSync('./wallet.json', '{ "key": "between these quotes goes the private key" }', (fserr) => {
+      const readline = require("readline-sync")
+      let key = readline.question();
+      fs.writeFileSync('./wallet.json', '{ "key": "'+key+'" }', (fserr) => {
         if (fserr) throw fserr
       })
-      console.log('New file wallet.json is created, please add here your PrivateKey and run this script again.\n')
+      console.log('New file wallet.json is created, please check your PrivateKey and run this script again.\n')
       process.exit(2)
     }
 
