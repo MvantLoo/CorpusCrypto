@@ -86,13 +86,15 @@
     - `const response: TransactionResponse = await airdropCore.claimAirdrop(airdrop.id, setGas())`
 
 - Inspect - Sources https://game.defikingdoms.com - static - js - utils - contracts - index.ts
-  ```export const getAirdropCore = () => {
-      const account = getAccount()
-      const chainId = getChainId()
-      const library = getLibrary()
-      const address = AIRDROP_ADDRESSESV2[chainId]
-      const ABI = AIRDROP_ABI as any
+```
+export const getAirdropCore = () => {
+  const account = getAccount()
+  const chainId = getChainId()
+  const library = getLibrary()
+  const address = AIRDROP_ADDRESSESV2[chainId]
+  const ABI = AIRDROP_ABI as any
 
-      if (!address) return
-      return new Contract(address, ABI, getProviderOrSigner(library, account))
-    }```
+  if (!address) return
+  return new Contract(address, ABI, getProviderOrSigner(library, account))
+}
+```
