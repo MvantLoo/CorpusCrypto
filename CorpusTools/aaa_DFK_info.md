@@ -67,11 +67,12 @@
     ```
 
 - Inspect - Sources https://game.defikingdoms.com - static - js - constants - airdrops - index.ts
-  ```export const AIRDROP_ADDRESSESV2:
-        [ChainId.DFK_MAINNET]: '0x947873092dc57C1A70704033c41cB110f4462a8B',
-        [ChainId.DFK_TESTNET]: '0x77f376aCc4FB5B9B8e965be16e12623A0567ff14',
-        [ChainId.HARMONY_MAINNET]: '0x8AbEbcDBF5AF9FC602814Eabf6Fbf952acF682A2',
-        [ChainId.HARMONY_TESTNET]: '0x3CC701CD8A4D3Cb137c7dd933480C4A67e10aC90',
+  ```
+  export const AIRDROP_ADDRESSESV2:
+    [ChainId.DFK_MAINNET]: '0x947873092dc57C1A70704033c41cB110f4462a8B',
+    [ChainId.DFK_TESTNET]: '0x77f376aCc4FB5B9B8e965be16e12623A0567ff14',
+    [ChainId.HARMONY_MAINNET]: '0x8AbEbcDBF5AF9FC602814Eabf6Fbf952acF682A2',
+    [ChainId.HARMONY_TESTNET]: '0x3CC701CD8A4D3Cb137c7dd933480C4A67e10aC90',
   ```
 
 
@@ -86,7 +87,7 @@
     - `const response: TransactionResponse = await airdropCore.claimAirdrop(airdrop.id, setGas())`
 
 - Inspect - Sources https://game.defikingdoms.com - static - js - utils - contracts - index.ts
-```
+  ```
 export const getAirdropCore = () => {
   const account = getAccount()
   const chainId = getChainId()
