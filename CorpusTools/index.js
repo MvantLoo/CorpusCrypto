@@ -82,11 +82,12 @@ class CorpusTools {
       const fs = require('fs')
       if (DEBUG) console.log(this.INFO, '[CT main] Create wallet file')
       const readline = require("readline-sync")
+      console.log('Type the PrivateKey, this will be stored in the file wallet.json')
       let key = readline.question();
       fs.writeFileSync('./wallet.json', '{ "key": "'+key+'" }', (fserr) => {
         if (fserr) throw fserr
       })
-      console.log('New file wallet.json is created, please check your PrivateKey and run this script again.\n')
+      console.log('New file wallet.json is created, please run this script again.\n')
       process.exit(2)
     }
 
