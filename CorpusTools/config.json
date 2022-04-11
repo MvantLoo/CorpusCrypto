@@ -102,13 +102,13 @@
   
   "swap": {
     "Harmony": {
-      "DEFIRA": { "address": "0x3C8BF7e25EbfAaFb863256A4380A8a93490d8065", "abi": "./abi_GENSWAP.json" },
-      "DFK":    { "address": "0x24ad62502d1c652cc7684081169d04896ac20f30", "abi": "./abi_GENSWAP.json" },
-      "VIPER":  { "address": "0xf012702a5f0e54015362cbca26a26fc90aa832a3", "abi": "./abi_GENSWAP.json" },
-      "SUSHI":  { "address": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506", "abi": "./abi_GENSWAP.json" }
+      "DEFIRA":     { "address": "0x3C8BF7e25EbfAaFb863256A4380A8a93490d8065", "abi": "./abi_GENSWAP.json" },
+      "DFK":        { "address": "0x24ad62502d1c652cc7684081169d04896ac20f30", "abi": "./abi_GENSWAP.json" },
+      "VIPERSWAP":  { "address": "0xf012702a5f0e54015362cbca26a26fc90aa832a3", "abi": "./abi_GENSWAP.json" },
+      "SUSHISWAP":  { "address": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506", "abi": "./abi_GENSWAP.json" }
     },
     "DFKCHAIN": {
-      "DFKCV":  { "address": "0x3C351E1afdd1b1BC44e931E12D4E05D6125eaeCa", "abi": "./abi_GENSWAP.json" }
+      "DFKCV":      { "address": "0x3C351E1afdd1b1BC44e931E12D4E05D6125eaeCa", "abi": "./abi_GENSWAP.json" }
     }
   },
 
