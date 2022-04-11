@@ -9,7 +9,7 @@ let DEBUG = 0 // 0=off 1=on
 if (DEBUG) console.log('\x1b[33m%s\x1b[0m', '[CT main] DEBUG is enabled by main.js')
 
 let ethers, config, wallet
-let provider, signer, myaddress
+let provider, signer, myaddress,chain,callOptions
 
 class CorpusTools {
   constructor() {
@@ -101,15 +101,25 @@ class CorpusTools {
   async connect_provider_signer(rpc) {
     console.log(this.INFO, '\nConnect Provider and Signer')
     // https://docs.ethers.io/v5/api/providers/jsonrpc-provider/
-    
+    let rpc_address
+
+    try { // Catch the variables
+      chain = this.config.rpc[rpc].chain
+      rpc_address = this.config.rpc[rpc].address
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR,'ERROR: RPC ' + rpc + ' does not exist!\n')
+      process.exit(1)
+    }
+
     try { // Connect Provider
-      provider = new ethers.providers.JsonRpcProvider(this.config.rpc[rpc])
+      provider = new ethers.providers.JsonRpcProvider(rpc_address)
       if (DEBUG) console.log(this.INFO, 'provider:', provider, '\n')
       console.log("  RPC: " + this.SUCCESS, provider.connection.url)
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
-      console.error(this.ERROR,'ERROR: Problem to connect with RPC ' + this.config.rpc[rpc] + '\n')
-      process.exit(4)
+      console.error(this.ERROR,'ERROR: Problem to connect with RPC ' + rpc_address + '\n')
+      process.exit(2)
     }
 
     try { // Connect Signer (Wallet)
@@ -129,12 +139,170 @@ class CorpusTools {
           process.exit(4)
       }
       console.error(this.ERROR,'ERROR: Problem to connect the Wallet/Signer\n')
-      process.exit(4)
+      process.exit(2)
     }
 
     if (this.config.debug) { DEBUG = 1 } // In case in the mainscript Debug is set, start DEBUG after connection is done
   }
+  async swap(swap,token1,token2,amount) {
+    console.log(this.INFO, '\nSwap', amount+' '+token1, 'to', token2, 'at', swap)
   
+    let swap_address,swap_abi
+    try { // Catch the variables
+      swap_address = this.config.swap[chain][swap].address
+      swap_abi = require(this.config.swap[chain][swap].abi)
+      callOptions = this.config.callOptions[chain]
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR,'ERROR: Swap ' + swap + ' does not exist!\n')
+      process.exit(1)
+    }
+
+    let token1_address,token1_abi,token1_gasfeetoken
+    try { // Catch the variables
+      token1_address = this.config.token[chain][token1].address
+      token1_abi = require(this.config.token[chain][token1].abi)
+      token1_gasfeetoken = this.config.token[chain][token1].gasfeetoken
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR,'ERROR: Token ' + token1 + ' does not exist!\n')
+      process.exit(1)
+    }
+
+    let token2_address,token2_abi,token2_gasfeetoken
+    try { // Catch the variables
+      token2_address = this.config.token[chain][token2].address
+      token2_abi = require(this.config.token[chain][token2].abi)
+      token2_gasfeetoken = this.config.token[chain][token2].gasfeetoken
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR,'ERROR: Token ' + token2 + ' does not exist!\n')
+      process.exit(1)
+    }
+
+    let SWAP, SIGNER, TOKEN1, TOKEN2
+    try { // Connect with the contracts
+      SWAP = new ethers.Contract(swap_address, swap_abi, provider)
+      SIGNER = await SWAP.connect(signer)
+      TOKEN1 = new ethers.Contract(token1_address, token1_abi, provider)
+      TOKEN2 = new ethers.Contract(token2_address, token2_abi, provider)
+
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
+      process.exit(8)
+    }
+
+    let balance, amountIn, amountOutMin, path 
+    try { // Get balance of Token1
+      if ( token1_gasfeetoken ) {
+        balance = await signer.getBalance()
+      } else {
+        balance = await TOKEN1.balanceOf(myaddress)
+      }
+      balance = Number(ethers.utils.formatEther(balance))
+      balance = Math.trunc(balance * 1000) / 1000 // Keep max 3 digits
+      console.log("  Balance 1: " + this.SUCCESS, balance.toFixed(3), token1)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with the contract of', token1)
+      process.exit(8)
+    }
+
+    try { // Get balance of Token2
+      let balance2 
+      if ( token2_gasfeetoken ) {
+        balance2 = await signer.getBalance()
+      } else {
+        balance2 = await TOKEN2.balanceOf(myaddress)
+      }
+      balance2 = Number(ethers.utils.formatEther(balance2))
+      balance2 = Math.trunc(balance2 * 1000) / 1000 // Keep max 3 digits
+      console.log("  Balance 2: " + this.SUCCESS, balance2.toFixed(3), token2)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with the contract of', token2)
+      process.exit(8)
+    }
+
+    try { // Check amount
+      let all
+      if (isNaN(amount)) { // Make sure the value is a number
+        if (amount.toLowerCase() == "all") { all = true } else { all = false } 
+        amount = 0
+      } 
+      amount = Number(amount) // Make sure the value is a number (if not ALL)
+
+      if ( !all && amount <= 0 ) { // Is there is nothing to swap, we can abort
+        console.log(this.WARN, 'WARNING', 'Nothing to swap, amount is', amount)
+        return
+      }
+
+      // If amount is ALL or if amount > balance, then use all (amount = balance)
+      if ( all || amount > balance) { all = true; amount = balance }
+      
+      console.log("  Amount to swap: " + this.SUCCESS, amount, token1)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to the amount', amount)
+      process.exit(8)
+    }
+    
+    try { // Find amountOutMin
+      path = [ token1_address, token2_address ]
+      amountIn = ethers.utils.parseEther(amount.toString(10))
+
+      let amountOut = await SWAP.getAmountsOut(amountIn, path)
+      amountOut = Number(ethers.utils.formatEther(amountOut[1]))
+      amountOutMin = (amountOut * 0.9).toFixed(3)  // 90% as minimum amount (10% slippage)
+
+      console.log("  Expected: " + this.SUCCESS, amountOut.toFixed(3), token2)
+      console.log("  Minimum: " + this.SUCCESS, amountOutMin, token2)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to find the minimum of', token2)
+      process.exit(8)
+    }
+
+    try { // Swap the tokens
+      console.log(this.WARN, '  Start swapping, patience...')
+      let deadline = (Date.now() / 1000).toFixed(0) + 60 // Dead in 60 seconds
+      amountOutMin = ethers.utils.parseEther(amountOutMin.toString(10))
+
+      let response
+      if ( token1_gasfeetoken ) {
+        if(DEBUG) console.log(this.WARN, "swapExactETHForTokens")
+        response = await SIGNER.swapExactETHForTokens(amountIn,amountOutMin,path,myaddress,deadline,callOptions)
+      } else if ( token2_gasfeetoken ) {
+        if(DEBUG) console.log(this.WARN, "swapExactTokensForETH")
+        response = await SIGNER.swapExactTokensForETH(amountIn,amountOutMin,path,myaddress,deadline,callOptions)
+      } else {
+        if(DEBUG) console.log(this.WARN, "swapExactTokensForTokens")
+        response = await SIGNER.swapExactTokensForTokens(amountIn,amountOutMin,path,myaddress,deadline,callOptions)
+      }
+      if (DEBUG>1) console.log(this.INFO, 'response:', response, '\n')
+      console.log("  Nonce: " + this.SUCCESS, response.nonce)
+  
+      let receipt = await response.wait()
+      if (DEBUG>1) console.log(this.INFO, 'receipt:', receipt, '\n')
+
+      let swapped = receipt.logs
+      swapped = swapped.filter(  (item) => item.address == token2_address  ) // Search for destination address in the logs
+      swapped = swapped[0].data
+      swapped = await ethers.utils.formatEther(swapped)
+      swapped = Number(swapped).toFixed(3)
+
+      console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+      console.log("  Received: " + this.SUCCESS, swapped, token2)
+      console.log("  Status: " + this.SUCCESS, receipt.status)
+      return swapped
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to the tokens')
+      process.exit(8)
+    }
+  }
+
   /******************
   ***     ONE     ***
   *******************/
