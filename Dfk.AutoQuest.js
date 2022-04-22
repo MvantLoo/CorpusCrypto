@@ -10,12 +10,6 @@
     3. RUN THE COPY
 */
 
-// Add here a list of Hero's that you want to use for the quests
-// Always keep the list of heroes between the square blocks
-// ! Leader first
-const forager_heroes = [725,2897]
-const fisher_heroes = [ ]
-
 let CT = require("./CorpusTools")
 let ct = new CT.CorpusTools()
 
@@ -30,10 +24,15 @@ async function loop() {
   console.log(ct.displayDateTime(Date.now()))
 
   await ct.dfk_show_quests()  // Show info about active quests
-  await ct.dfk_stop_quests()  // Stop any completed quests   
-  //await ct.dfk_start_quest_forager(forager_heroes) // Start a new Forager Quest if all assigned heroes are available and above 7 Stamina
-  //await ct.dfk_start_quest_fisher(fisher_heroes)   // Start a new Fisher Quest if all assigned heroes are available and above 7 Stamina
-  //setTimeout(() => loop(), "10000"); // 300000 = 5 minute break, then restart
+  await ct.dfk_stop_quests()  // Stop any completed quests
+
+  await ct.dfk_start_quest_foraging(25,5,40532) // Start a new Foraging Quest
+  await ct.dfk_start_quest_fisher(25,5,9438)   // Start a new Fisher Quest
+  await ct.dfk_start_quest_jewel(10,1,2897,725)   // Start a new Jewel mining Quest
+  //  await ct.dfk_start_quest_gardener(15,1,9438)   // Start a new Jewel mining Quest
+
+  console.log(ct.YELLOW,'Lets wait a few minutes and try again')
+  setTimeout(() => loop(), "300000"); // 300000 = 5 minute break, then restart
 }
 
 async function main() {  

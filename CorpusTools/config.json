@@ -34,6 +34,26 @@
     "VIPER":     { "address": "0xea589e93ff18b1a1f1e9bac7ef3e86ab62addc79", "abi": "./abi_VIPER.json" },
     "VIPERSWAP": { "address": "0xf012702a5f0e54015362cbca26a26fc90aa832a3", "abi": "./abi_VIPERSWAP.json" },
 
+    "Harmony": {
+      "WONE": { "address": "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a" },
+
+      "JEWEL":             { "address": "0x72cb10c6bfa5624dd07ef608027e366bd690048f", "abi": "./abi_DFKJEWEL.json" },
+      "XJEWEL":            { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to BANK" },
+      "DFKQUEST":          { "address": "0x5100bd31b822371108a0f63dcfb6594b9919eaf4", "abi": "./abi_DFKQUEST.json" },
+      "DFKQUEST2":         { "address": "0xaa9a289ce0565e4d6548e63a441e7c084e6b52f6", "abi": "./abi_DFKQUEST.json" },
+      "DFKBANK":           { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to xJEWEL" },
+      "DFKBANKER":         { "address": "0x3685ec75ea531424bbe67db11e07013abeb95f1e", "abi": "./abi_DFKBANKER.json" },
+      "DFKMASTERGARDENER": { "address": "0xdb30643c71ac9e2122ca0341ed77d09d5f99f924", "abi": "./abi_DFKMASTERGARDENER.json" },
+      "DFKHERO":           { "address": "0x5f753dcdf9b1ad9aabc1346614d1f4746fd6ce5c" },
+  
+      "TRANQ":      { "address": "0xcf1709ad76a79d5a60210f23e81ce2460542a836", "abi": "./abi_TRANQ.json" },
+      "TRANQSTAKE": { "address": "0x55ae07bb8bae1501f9aebf35801b5699eae63bb7", "abi": "./abi_TRANQSTAKE.json" },
+      "TRANQLOCK":  { "address": "0xba20c40339bcda584985522da3f6e61c2cc1f96e", "abi": "./abi_TRANQLOCK.json" },
+  
+      "VIPER":     { "address": "0xea589e93ff18b1a1f1e9bac7ef3e86ab62addc79", "abi": "./abi_VIPER.json" },
+      "VIPERSWAP": { "address": "0xf012702a5f0e54015362cbca26a26fc90aa832a3", "abi": "./abi_VIPERSWAP.json" }
+    },
+
     "DFKCHAIN": {
       "JEWEL":       { "address": "0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260", "abi": "./abi_GENTOKEN.json", "gasfeetoken": true },
       "AVAX":        { "address": "0xB57B60DeBDB0b8172bb6316a9164bd3C695F133a", "abi": "./abi_GENTOKEN.json" },
@@ -134,11 +154,21 @@
     }
   },
 
-  "dfk_quests": {"case":"lowercase",
-    "0xe259e8386d38467f0e7ffedb69c3c9c935dfaefc": "Fishing",
+  "dfk_quests": {
+    "0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc": "Fishing",
     "0x3132c76acf2217646fb8391918d28a16bd8a8ef4": "Foraging",
-    "0x6ff019415ee105acf2ac52483a33f5b43eadb8d0": "Jewel Mining",
-    "0x0548214a0760a897af53656f4b69dbad688d8f29": "WishingWell"
+    "0x6FF019415Ee105aCF2Ac52483A33F5B43eaDB8d0": "Jewel Mining",
+    "0x0548214a0760a897af53656f4b69dbad688d8f29": "WishingWell",
+    "0x569E6a4c2e3aF31B337Be00657B4C040C828Dd73": "Gold Mining",
+    "0xe4154B6E5D240507F9699C730a496790A722DF19": "Gardener", 
+    "0x347097454fa1931a4e80dcdebb31f29fc355cbce": "Puzzle Solving (WIS)", 
+    "0xcb594a24d802cdf65000a84dc0059dde11c9d15f": "Dancing (END)", 
+    "0xfa20b218927b0f57a08196743488c7c790a5625b": "Game of Ball (AGI)", 
+    "0x13e74e4e64805e7fda381c9bef1e77cd16086e56": "Card Game (LCK)", 
+    "0xf60af3a32bb94e395e17c70ab695d968f37bd2e4": "Arm Wrestling (STR)", 
+    "0xe03fd4e2f6421b1251297240ce5248508c9104ed": "Darts (DEX)", 
+    "0x2174bbefbefbd766326a7c7538f93a78db3ed449": "Helping the Farm (VIT)", 
+    "0x6176eede1ae9127d59266f197ad598653e4f8c92": "Alchemist Assistant (INT)"
   }
   
 }

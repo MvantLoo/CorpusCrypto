@@ -110,6 +110,8 @@
 # DFK New Quests
 
 - Address: `0xaa9a289ce0565e4d6548e63a441e7c084e6b52f6`
+              b465f4590095dad50fee6ee0b7c6700ac2b04df8
+- Quests contract: https://beta.explorer.harmony.one/address/0xaa9a289ce0565e4d6548e63a441e7c084e6b52f6?activeTab=7
 - Function: `startQuest( uint256[]:2897, address:one1z0n5unnysp08lk3crjd778nhe5tqsmjktctwgy, uint8:1, uint8:1 )`
 - Complete new quests (need to compare with previous quests)
   ```
