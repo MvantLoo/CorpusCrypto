@@ -23,7 +23,7 @@ async function loop() {
   console.log(ct.GREEN,'#####   Stop with Ctrl-C   #####')
   console.log(ct.displayDateTime(Date.now()))
 
-  await ct.dfk_show_quests()  // Show info about active quests
+  //await ct.dfk_show_quests()  // Show info about active quests
   await ct.dfk_stop_quests()  // Stop any completed quests
 
   await ct.dfk_start_quest_foraging(15,3,40532)   // Foraging Quest, wait for 15 Stamina, start 3 attempts, hero-nr 40532
