@@ -27,8 +27,9 @@ async function loop() {
   await ct.dfk_stop_quests()  // Stop any completed quests
 
   await ct.dfk_start_quest_foraging(15,3,40532)   // Foraging Quest, wait for 15 Stamina, start 3 attempts, hero-nr 40532
-  await ct.dfk_start_quest_fisher(15,3,9438)      // Fisher Quest, wait for 15 Stamina, start 3 attempts, hero-nr 9438
+  //await ct.dfk_start_quest_fisher(15,3,9438)      // Fisher Quest, wait for 15 Stamina, start 3 attempts, hero-nr 9438
   await ct.dfk_start_quest_jewel(15,1,2897,725)   // Jewel-mining Quest, wait for 15 Stamina, always 1 attempt, heroes 2897(leader) and 725
+  await ct.dfk_start_quest_jewel(15,1,47680,9438)   // Jewel-mining Quest, wait for 15 Stamina, always 1 attempt, heroes 2897(leader) and 725
   //  await ct.dfk_start_quest_gardener(15,1,9438)   // Start a new Jewel mining Quest
 
   console.log(ct.YELLOW,'\nLets wait a few minutes and start over')

@@ -3,16 +3,18 @@
 
 */
 
+const fs = require("fs")
+const readline = require("readline")
 const { exec } = require("child_process")
 
 let DEBUG = 0 // 0=off 1=on
 if (DEBUG) console.log('\x1b[33m%s\x1b[0m', '[CT main] DEBUG is enabled by main.js')
 
-let ethers, config, wallet
+let ethers, config, w, wallet
 let provider, signer, myaddress,chain,callOptions
 
 class CorpusTools {
-  constructor() {
+  constructor(w) {
 
     this.TEST    = 'TEST'
     this.BLACK   = '\x1b[30m%s\x1b[0m'
@@ -30,9 +32,13 @@ class CorpusTools {
 
     this.delay = ms => new Promise(res => setTimeout(res, ms))
 
+    if ( !w ) { 
+      w = "wallet.json"
+    }
+  
     this.read_config()
     this.read_ethers()
-    this.read_wallet()
+    wallet = this.read_wallet(w)
   }
   read_config() {
     try { // Read the config file
@@ -72,28 +78,22 @@ class CorpusTools {
       setTimeout(function () { read_ethers() }, 10000) // Wait 10 seconds and retry
     }
   }
-  read_wallet() {
+  read_wallet(w) {
     try { // Read the wallet
       if (DEBUG) console.log(this.INFO, '[CT main] Read wallet file')
-      wallet = require("../wallet.json")
+      return require('../' + w)
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
-      console.error(this.ERROR,'ERROR: File "wallet.json" is missing.')
+      console.error(this.ERROR,'ERROR: File "'+w+'" is missing.')
       const fs = require('fs')
       if (DEBUG) console.log(this.INFO, '[CT main] Create wallet file')
       const readline = require("readline-sync")
-      console.log('Type the PrivateKey, this will be stored in the file wallet.json')
+      console.log('Type the PrivateKey, this will be stored in the file '+w)
       let key = readline.question();
-      fs.writeFileSync('./wallet.json', '{ "key": "'+key+'" }', (fserr) => {
+      fs.writeFileSync(w, '{ "key": "'+key+'" }', (fserr) => {
         if (fserr) throw fserr
       })
-      console.log('New file wallet.json is created, please run this script again.\n')
-      process.exit(2)
-    }
-
-    if (wallet.key == "between these quotes goes the private key") {
-      console.error(this.ERROR,'ERROR: File "wallet.json" does not contain a PrivateKey.')
-      console.log('Please add here your PrivateKey in file "wallet.json" and run this script again.\n')
+      console.log('New file '+w+' is created, please run this script again.\n')
       process.exit(2)
     }
   }
@@ -637,6 +637,7 @@ class CorpusTools {
           if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
           console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
         }
+        console.log(" ")
       }
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
@@ -708,7 +709,7 @@ class CorpusTools {
     console.log("  Heroes:   " + this.SUCCESS, heroes)
     console.log("  Attempts: " + this.SUCCESS, attempts)
     
-    console.log(this.WARN,"  Finishing, patience...")
+    console.log(this.WARN,"  Starting, patience...")
     try {
       let response = await SIGNER.startQuest(
         heroes,
