@@ -5,7 +5,7 @@
 */
 
 let CT = require("./CorpusTools")
-let ct = new CT.CorpusTools()
+let ct = new CT.CorpusTools("wallet.yezzi.json")
 
 console.log(ct.GREEN,'\n#############################################')
 console.log(ct.GREEN,'#####    DFK Crystalvale AutoHarvest    #####')
