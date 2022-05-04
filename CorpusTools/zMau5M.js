@@ -1,4 +1,4 @@
-let CT = require("./CorpusTools")
+let CT = require("./index.js")
 let ct = new CT.CorpusTools()
 
 console.log(ct.GREEN,'\n################################')
