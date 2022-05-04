@@ -35,7 +35,7 @@
     "VIPERSWAP": { "address": "0xf012702a5f0e54015362cbca26a26fc90aa832a3", "abi": "./abi_VIPERSWAP.json" },
 
     "Harmony": {
-      "WONE": { "address": "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a" },
+      "WONE": { "address": "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a", "abi": "./abi_GENTOKEN.json", "gasfeetoken": true },
 
       "JEWEL":             { "address": "0x72cb10c6bfa5624dd07ef608027e366bd690048f", "abi": "./abi_DFKJEWEL.json" },
       "XJEWEL":            { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to BANK" },
@@ -45,6 +45,8 @@
       "DFKBANKER":         { "address": "0x3685ec75ea531424bbe67db11e07013abeb95f1e", "abi": "./abi_DFKBANKER.json" },
       "DFKMASTERGARDENER": { "address": "0xdb30643c71ac9e2122ca0341ed77d09d5f99f924", "abi": "./abi_DFKMASTERGARDENER.json" },
       "DFKHERO":           { "address": "0x5f753dcdf9b1ad9aabc1346614d1f4746fd6ce5c" },
+      "DFKSUMMON":         { "address": "0xf4d3aE202c9Ae516f7eb1DB5afF19Bf699A5E355" },
+      "DFKMEDITATION":     { "address": "0x0594D86b2923076a2316EaEA4E1Ca286dAA142C1" },
   
       "TRANQ":      { "address": "0xcf1709ad76a79d5a60210f23e81ce2460542a836", "abi": "./abi_TRANQ.json" },
       "TRANQSTAKE": { "address": "0x55ae07bb8bae1501f9aebf35801b5699eae63bb7", "abi": "./abi_TRANQSTAKE.json" },

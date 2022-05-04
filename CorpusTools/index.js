@@ -302,6 +302,58 @@ class CorpusTools {
       process.exit(8)
     }
   }
+  async show(swap,token) {
+    console.log(this.INFO, '\nShow', token, 'balance at', swap)
+  
+    let swap_address,swap_abi
+    try { // Catch the variables
+      swap_address = this.config.swap[chain][swap].address
+      swap_abi = require(this.config.swap[chain][swap].abi)
+      callOptions = this.config.callOptions[chain]
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR,'ERROR: Swap ' + swap + ' does not exist!\n')
+      process.exit(1)
+    }
+
+    let token_address,token_abi,token_gasfeetoken
+    try { // Catch the variables
+      token_address = this.config.token[chain][token].address
+      token_abi = require(this.config.token[chain][token].abi)
+      token_gasfeetoken = this.config.token[chain][token].gasfeetoken
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR,'ERROR: Token ' + token + ' does not exist!\n')
+      process.exit(1)
+    }
+
+    let SWAP, SIGNER, TOKEN
+    try { // Connect with the contracts
+      SWAP  = new ethers.Contract(swap_address, swap_abi, provider)
+      TOKEN = new ethers.Contract(token_address, token_abi, provider)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
+      process.exit(8)
+    }
+
+    let balance
+    try { // Get balance of Token
+      if ( token_gasfeetoken ) {
+        balance = await signer.getBalance()
+      } else {
+        balance = await TOKEN.balanceOf(myaddress)
+      }
+      balance = Number(ethers.utils.formatEther(balance))
+      balance = Math.trunc(balance * 1000) / 1000 // Keep max 3 digits
+      console.log("  Balance: " + this.SUCCESS, balance.toFixed(3), token)
+      return balance.toFixed(3)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with the contract of', token)
+      process.exit(8)
+    }
+  }
 
   /******************
   ***     ONE     ***
@@ -550,6 +602,69 @@ class CorpusTools {
   /*********************
   ***    DFK - SD    ***
   **********************/
+  async dfk_harvest() { 
+    console.log(this.INFO, '\nDFK Harvest')
+    try{
+      /* 0x5eac6239 claimRewards(uint256[])
+      0000000000000000000000000000000000000000000000000000000000000020
+      0000000000000000000000000000000000000000000000000000000000000001
+      0000000000000000000000000000000000000000000000000000000000000000 */
+      let response = await signer.sendTransaction({
+        to: this.config.contract.Harmony.DFKMASTERGARDENER.address,
+        data: '0x5eac6239000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000'
+      }, this.config.callOptions.harmony)
+      console.log("  Nonce: " + this.SUCCESS, response.nonce)
+      if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+
+      let receipt = await response.wait()
+      if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
+      console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+      return 
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with contract')
+      process.exit(8)
+    }
+  }
+  
+  async dfk_deposit(amount) { // Jeweler
+    console.log(this.INFO, '\nDFK Deposit in the bank')
+
+    let DFKBANK,SIGNER
+    try { // Connect with the contracts
+      DFKBANK = new ethers.Contract( 
+        this.config.contract.Harmony.DFKBANK.address, 
+        require(this.config.contract.Harmony.DFKBANK.abi), provider 
+      )
+      SIGNER = await DFKBANK.connect(signer)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
+      return
+    }
+
+    if (isNaN(amount)) { // Make sure the value is a number
+      console.log(this.WARN, 'WARNING', 'Nothing to deposit, amount is', amount)
+      return
+    }
+    amount = ethers.utils.parseEther(amount.toString(10))
+
+    try {
+      let response = await SIGNER.enter(amount,callOptions)
+      console.log("  Nonce: " + this.SUCCESS, response.nonce)
+      if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+
+      let receipt = await response.wait()
+      if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
+      console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+      return 
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to deposit')
+      process.exit(8)
+    }
+  }
+
   async dfk_show_quests() {
     console.log(this.INFO, '\nShow DefiKingdoms Quests')
 
@@ -593,13 +708,17 @@ class CorpusTools {
   async dfk_stop_quests() {
     console.log(this.INFO, '\nStop finished DefiKingdoms Quests')
 
-    let DFKQUEST,SIGNER
+    let DFKQUEST,DFKQUEST2,SIGNER
     try { // Connect with the contracts
       DFKQUEST = new ethers.Contract( 
         this.config.contract.Harmony.DFKQUEST.address, 
         require(this.config.contract.Harmony.DFKQUEST.abi), provider 
       )
-      SIGNER = await DFKQUEST.connect(signer)
+      DFKQUEST2 = new ethers.Contract( 
+        this.config.contract.Harmony.DFKQUEST2.address, 
+        require(this.config.contract.Harmony.DFKQUEST2.abi), provider 
+      )
+      SIGNER = await DFKQUEST2.connect(signer)
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
       console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
@@ -731,66 +850,91 @@ class CorpusTools {
   }
 
   async dfk_start_quest2(address,stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
-    let DFKQUEST,SIGNER
+    let DFKQUEST,DFKQUEST2,SIGNER
     try { // Connect with the contracts
       DFKQUEST = new ethers.Contract( 
+        this.config.contract.Harmony.DFKQUEST.address, 
+        require(this.config.contract.Harmony.DFKQUEST.abi), provider 
+      )
+      DFKQUEST2 = new ethers.Contract( 
         this.config.contract.Harmony.DFKQUEST2.address, 
         require(this.config.contract.Harmony.DFKQUEST2.abi), provider 
       )
-      SIGNER = await DFKQUEST.connect(signer)
+      SIGNER = await DFKQUEST2.connect(signer)
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
       console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
-      process.exit(8)
+      return
     }
 
-    if (stamina<5) {
-      console.error(this.WARN, 'WARNING: Start the quest with less then 5 stamina is not really usefull')
-      console.log('USAGE: dfk_start_quest_foraging(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)')
-      return
-    }
-    if (stamina>30) {
-      console.error(this.WARN, 'WARNING: Start the quest when there is more then 30 stamina, means it probably will never start')
-      console.log('USAGE: dfk_start_quest_foraging(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)')
-      return
-    }
-    if (attempts<1) {
-      console.error(this.WARN, 'WARNING: Minimal 1 attempt')
-      console.log('USAGE: dfk_start_quest_foraging(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)')
-      return
-    }
-    if (!hero1) {
-      console.error(this.WARN, 'WARNING: There are no heroes for this quest')
-      console.log('USAGE: dfk_start_quest_foraging(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)')
+    if (stamina < 5)  { console.error(this.WARN, 'WARNING: Start the quest with less then 5 stamina is not really usefull'); return }
+    if (stamina > 30) { console.error(this.WARN, 'WARNING: Start the quest when there is more then 30 stamina, means it probably will never start'); return }
+    if (attempts < 1) { console.error(this.WARN, 'WARNING: Minimal 1 attempt'); return }
+    if ( !hero1 )     { console.error(this.WARN, 'WARNING: There are no heroes for this quest'); return }
+
+    let working_heroes = []
+    try { // Get running quests
+      let quests = await DFKQUEST.getActiveQuests(myaddress)
+      for (let quest of quests) {
+        for (let hero of quest.heroes) {
+          working_heroes.push( ethers.BigNumber.from(hero).toNumber() )
+        }
+      }
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to request for the running quests')
       return
     }
 
     let heroes = [hero1,hero2,hero3,hero4,hero5,hero6]
     heroes = heroes.filter(Number) // Filter empty elements
-    for (let hero of heroes) { // Check the stamina of each hero to find out
-      if (hero) {
-        let currentstamina = await DFKQUEST.getCurrentStamina(hero)
-        if (currentstamina < stamina) {
-          console.log(this.RED, "No time yet for hero " + hero, "Stamina:", ethers.BigNumber.from(currentstamina).toNumber(), "Wait for:", stamina)
-          return
+    try {
+      for (let hero of heroes) { // Check the stamina of each hero to find out
+        if (hero) {
+          if (working_heroes.includes(hero)) {
+            console.log(this.RED, "Hero " + hero + " is still at work.")
+            return
+          }
+          let currentstamina = await DFKQUEST.getCurrentStamina(hero)
+          currentstamina = ethers.BigNumber.from(currentstamina).toNumber()
+          if (currentstamina < stamina) {
+            console.log(this.RED, "No time yet for hero " + hero, "Stamina:", currentstamina, "Wait for:", stamina)
+            return
+          }
+          console.log("  Stamina of hero " + hero + ": " + this.SUCCESS, currentstamina)
         }
       }
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to request for the current stamina')
+      return
     }
 
     // We are still here? Then it means we can start the quest !
-    let response = await SIGNER.startQuest(
-      heroes,
-      address,
-      attempts,
-      this.config.callOptions.Harmony)
-    if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
-    console.log("  Nonce: " + this.SUCCESS, response.nonce)
+    console.log("  Quest:    " + this.SUCCESS, this.config.dfk_quests[address], "("+address+")")
+    console.log("  Heroes:   " + this.SUCCESS, heroes)
+    console.log("  Attempts: " + this.SUCCESS, attempts)
+    
+    console.log(this.WARN,"  Starting, patience...")
+    try {
+      let response = await SIGNER.startQuest(
+        heroes,
+        address,
+        attempts,
+        0,
+        this.config.callOptions.Harmony)
+      if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+      console.log("  Nonce: " + this.SUCCESS, response.nonce)
 
-    let receipt = await response.wait()
-    if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
-    console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
-
-  }
+      let receipt = await response.wait()
+      if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
+      console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to start the quest')
+      return
+    }
+  } 
 
   async dfk_start_quest_foraging(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
     console.log(this.INFO, '\nStart Foraging Quest')
@@ -799,8 +943,8 @@ class CorpusTools {
   }
   async dfk_start_quest_fisher(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
     console.log(this.INFO, '\nStart Fisher Quest')
-    await this.dfk_start_quest("0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
-//    await this.dfk_start_quest2("0xb465f4590095dad50fee6ee0b7c6700ac2b04df8",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
+    //await this.dfk_start_quest("0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
+    await this.dfk_start_quest2("0xadffd2a255b3792873a986895c6312e8fbacfc8b",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
   }
 
   async dfk_start_quest_gardener(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {

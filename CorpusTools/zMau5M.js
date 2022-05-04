@@ -1,4 +1,3 @@
-
 let CT = require("./CorpusTools")
 let ct = new CT.CorpusTools()
 
