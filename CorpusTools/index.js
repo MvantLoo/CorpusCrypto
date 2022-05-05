@@ -718,7 +718,7 @@ class CorpusTools {
         this.config.contract.Harmony.DFKQUEST2.address, 
         require(this.config.contract.Harmony.DFKQUEST2.abi), provider 
       )
-      SIGNER = await DFKQUEST2.connect(signer)
+      SIGNER = await DFKQUEST.connect(signer)
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
       console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
