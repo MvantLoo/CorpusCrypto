@@ -40,7 +40,7 @@
       "JEWEL":             { "address": "0x72cb10c6bfa5624dd07ef608027e366bd690048f", "abi": "./abi_DFKJEWEL.json" },
       "XJEWEL":            { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to BANK" },
       "DFKQUEST":          { "address": "0x5100bd31b822371108a0f63dcfb6594b9919eaf4", "abi": "./abi_DFKQUEST.json" },
-      "DFKQUEST2":         { "address": "0xaa9a289ce0565e4d6548e63a441e7c084e6b52f6", "abi": "./abi_DFKQUEST.json" },
+      "DFKQUEST2":         { "address": "0xAa9a289ce0565E4D6548e63a441e7C084E6B52F6", "abi": "./abi_DFKQUEST2.json" },
       "DFKBANK":           { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to xJEWEL" },
       "DFKBANKER":         { "address": "0x3685ec75ea531424bbe67db11e07013abeb95f1e", "abi": "./abi_DFKBANKER.json" },
       "DFKMASTERGARDENER": { "address": "0xdb30643c71ac9e2122ca0341ed77d09d5f99f924", "abi": "./abi_DFKMASTERGARDENER.json" },
@@ -158,6 +158,7 @@
 
   "dfk_quests": {
     "0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc": "Fishing",
+    "0xADFFD2A255B3792873a986895c6312e8FbacFc8B": "Fishing", "version": 2,
     "0x3132c76acF2217646fB8391918D28a16bD8A8Ef4": "Foraging",
     "0x6FF019415Ee105aCF2Ac52483A33F5B43eaDB8d0": "Jewel Mining",
     "0x0548214a0760a897af53656f4b69dbad688d8f29": "WishingWell",

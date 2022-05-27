@@ -705,7 +705,7 @@ class CorpusTools {
     }
   }
 
-  async dfk_stop_quests() {
+  async dfk_stop_quests() { DEBUG=0
     console.log(this.INFO, '\nStop finished DefiKingdoms Quests')
 
     let DFKQUEST,DFKQUEST2,SIGNER
@@ -719,6 +719,7 @@ class CorpusTools {
         require(this.config.contract.Harmony.DFKQUEST2.abi), provider 
       )
       SIGNER = await DFKQUEST.connect(signer)
+
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
       console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
@@ -764,8 +765,71 @@ class CorpusTools {
       console.error(this.ERROR, 'ERROR: Problem to stop the quests')
       return
     }
-  }
 
+    await this.dfk_stop_quests2()
+
+  }
+  async dfk_stop_quests2() { 
+    console.log(this.INFO, '\nStop finished DefiKingdoms Quests Version 2')
+
+    let DFKQUEST,DFKQUEST2,SIGNER,SIGNER2
+    try { // Connect with the contracts
+      DFKQUEST = new ethers.Contract( 
+        this.config.contract.Harmony.DFKQUEST2.address, 
+        require(this.config.contract.Harmony.DFKQUEST.abi), provider 
+      )
+      DFKQUEST2 = new ethers.Contract( 
+        this.config.contract.Harmony.DFKQUEST2.address, 
+        require(this.config.contract.Harmony.DFKQUEST2.abi), provider 
+      )
+      SIGNER = await DFKQUEST.connect(signer)
+      SIGNER2 = await DFKQUEST2.connect(signer)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
+      return
+    }
+
+    try { // Show Quest info
+      let quests = await DFKQUEST2.getAccountActiveQuests(myaddress)
+      if (DEBUG) console.log(this.INFO, "getAccountActiveQuests:", quests, '\n') 
+      
+      for (let q of quests) {
+        let quest_name = this.config.dfk_quests[q.questAddress] // Try to translate to a name
+        if (!quest_name) quest_name = q.questAddress            // Unknown quest name
+
+        let heroes = "" // Make a list of the heroes in the quest
+        q.heroes.forEach( (h) => {
+          heroes += h + "  "
+        })
+
+        // Show info about the running
+        console.log("  Quest:       " + this.SUCCESS, quest_name)
+        console.log("  Heroes:      " + this.SUCCESS, heroes)
+        console.log("  Start time:  " + this.SUCCESS, this.displayTime(q.startAtTime * 1000))
+        console.log("  Finished at: " + this.SUCCESS, this.displayTime(q.completeAtTime * 1000))
+        console.log("  Attemps:     " + this.SUCCESS, q.attempts)
+
+        if (q.completeAtTime < Math.round(Date.now() / 1000)) { // If the quest is finished
+          console.log(this.WARN,"  Finishing, patience...")
+
+          let response = await SIGNER2.completeQuest(q.heroes[0], this.config.callOptions.Harmony)
+          if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+          console.log("  Nonce: " + this.SUCCESS, response.nonce)
+  
+          let receipt = await response.wait()
+          if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
+          console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+        }
+        console.log(" ")
+      }
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to stop the quests')
+      return
+    }
+  }
   async dfk_start_quest(address,stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
     let DFKQUEST,SIGNER
     try { // Connect with the contracts
