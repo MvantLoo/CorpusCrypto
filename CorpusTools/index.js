@@ -106,10 +106,10 @@ class CorpusTools {
     this.MAGENTA = '%s'
     this.CYAN    = '%s'
     this.WHITE   = '%s'
-    this.ERROR   = '%s'
-    this.WARN    = '%s'
-    this.SUCCESS = '%s'
-    this.INFO    = '%s'
+    this.ERROR   = '  *** ERROR *** %s'
+    this.WARN    = '  *** WARNING *** %s'
+    this.SUCCESS = '  %s'
+    this.INFO    = '  %s'
   }
 
   async connect_provider_signer(rpc) {
@@ -140,10 +140,10 @@ class CorpusTools {
       // https://docs.ethers.io/v5/api/signer/
       signer = new ethers.Wallet(wallet.key, provider)
       if (DEBUG) console.log(this.INFO, 'signer:', signer, '\n')
-      console.log("  Wallet is Signer? " + this.SUCCESS,signer._isSigner)
-      console.log("  Balance: " + this.SUCCESS, Number(ethers.utils.formatEther(await signer.getBalance())).toFixed(3))
+      //console.log("  Wallet is Signer? " + this.SUCCESS,signer._isSigner)
       myaddress = await signer.getAddress()
       console.log("  My address: " + this.SUCCESS, myaddress)
+      console.log("  Balance: " + this.SUCCESS, Number(ethers.utils.formatEther(await signer.getBalance())).toFixed(3))
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
       switch(err.reason) {
@@ -720,7 +720,7 @@ class CorpusTools {
   }
 
   async dfk_stop_quests() { DEBUG=0
-    console.log(this.INFO, '\nStop finished DefiKingdoms Quests')
+    console.log(this.INFO, '\nStop finished DefiKingdoms Quests Version 1')
 
     let DFKQUEST,DFKQUEST2,SIGNER
     try { // Connect with the contracts
@@ -758,7 +758,7 @@ class CorpusTools {
         console.log("  Heroes:      " + this.SUCCESS, heroes)
         console.log("  Start time:  " + this.SUCCESS, this.displayTime(q.startTime * 1000))
         console.log("  Finished at: " + this.SUCCESS, this.displayTime(q.completeAtTime * 1000))
-        console.log("  Attemps:     " + this.SUCCESS, q.attempts)
+        //console.log("  Attemps:     " + this.SUCCESS, q.attempts)
 
         if (q.completeAtTime < Math.round(Date.now() / 1000)) { // If the quest is finished
           console.log(this.WARN,"  Finishing, patience...")
@@ -784,7 +784,7 @@ class CorpusTools {
 
   }
   async dfk_stop_quests2() { 
-    console.log(this.INFO, '\nStop finished DefiKingdoms Quests Version 2')
+    console.log(this.INFO, 'Stop finished DefiKingdoms Quests Version 2')
 
     let DFKQUEST,DFKQUEST2,SIGNER,SIGNER2
     try { // Connect with the contracts
@@ -822,7 +822,7 @@ class CorpusTools {
         console.log("  Heroes:      " + this.SUCCESS, heroes)
         console.log("  Start time:  " + this.SUCCESS, this.displayTime(q.startAtTime * 1000))
         console.log("  Finished at: " + this.SUCCESS, this.displayTime(q.completeAtTime * 1000))
-        console.log("  Attemps:     " + this.SUCCESS, q.attempts)
+        //console.log("  Attemps:     " + this.SUCCESS, q.attempts)
 
         if (q.completeAtTime < Math.round(Date.now() / 1000)) { // If the quest is finished
           console.log(this.WARN,"  Finishing, patience...")
