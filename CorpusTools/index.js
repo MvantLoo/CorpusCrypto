@@ -97,6 +97,20 @@ class CorpusTools {
       process.exit(2)
     }
   }
+  disable_color() {
+    this.BLACK   = '%s'
+    this.RED     = '%s'
+    this.GREEN   = '%s'
+    this.YELLOW  = '%s'
+    this.BLUE    = '%s'
+    this.MAGENTA = '%s'
+    this.CYAN    = '%s'
+    this.WHITE   = '%s'
+    this.ERROR   = '%s'
+    this.WARN    = '%s'
+    this.SUCCESS = '%s'
+    this.INFO    = '%s'
+  }
 
   async connect_provider_signer(rpc) {
     console.log(this.INFO, '\nConnect Provider and Signer')
