@@ -17,10 +17,10 @@ let ct = new CT.CorpusTools([wallet])
   - `wallet`: Give the name of the wallet-file, in case you want to use multiple wallets. _(optional)_ Default is `"wallet.json"`
 
 ### General functions
-- `await ct.connect_provider_signer(rpc)`
-Connects with an RPC.
-  - `rpc`: Give the name of the RPC to be used. _(required)_
-    Lookup in `config.json` at `rpc`.
+- `await ct.connect_provider_signer(rpc)`<br/>
+Connects with an RPC.<br/>
+  - `rpc`: Give the name of the RPC to be used. _(required)_<br/>
+    Lookup in `config.json` at `rpc`.<br/>
 Example: `await ct.connect_provider_signer("harmonypokt")`
 
 
