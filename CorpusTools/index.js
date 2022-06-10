@@ -1002,13 +1002,13 @@ class CorpusTools {
     }
   } 
 
-  async dfk_start_quest_foraging(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
+  async dfk_start_quest_forager(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
     console.log(this.INFO, '\nStart Foraging Quest')
 //    await this.dfk_start_quest("0x3132c76acF2217646fB8391918D28a16bD8A8Ef4",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
     await this.dfk_start_quest2("0xB465F4590095daD50FEe6Ee0B7c6700AC2b04dF8",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
   }
   async dfk_start_quest_fisher(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
-    console.log(this.INFO, '\nStart Fisher Quest')
+    console.log(this.INFO, '\nStart Fishing Quest')
     //await this.dfk_start_quest("0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
     await this.dfk_start_quest2("0xADFFD2A255B3792873a986895c6312e8FbacFc8B",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
   }
