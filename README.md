@@ -19,13 +19,36 @@ let ct = new CT.CorpusTools([wallet])
 ### General functions
 - `await ct.connect_provider_signer(rpc)`
 
-  Connects with an RPC.<br/>
+  Connects with an RPC.
   - `rpc`: Give the name of the RPC to be used. _(required)_<br/>
     Lookup in `config.json` at `rpc`.
 
   Example: `await ct.connect_provider_signer("harmonypokt")`
 
+- `await ct.swap(swap,token1,token2,amount)`
 
+  Do an swap on an exchange for token1 to token2. **Only** one-step swaps are possible. Check first in the GUI is a one-step swap is possible, if you see that a swap goes in 2 (or more) steps, give for every step a seperate `swap` command.
+  - `swap`: What swap (location) do you want to use. _(required)_<br/>
+    Lookup in `config.json` at `swap`-_{chain-name}_.
+  - `token1`, `token2`: The two token names from and whereto you want to exchange. _(required)_<br/>
+    Lookup in `config.json` at `token`-_{chain-name}_.
+  - `amount`: Amount of tokens that you want to swap. Use "ALL" in case you want to swap all tokens.
+
+  Example: `await ct.swap("VIPERSWAP", "VIPER", "ONE", 10)`
+
+  Return: _(optional)_ the amount of swapped tokens. Example: `let swapped = await ct.swap("DFK", "JEWEL", "1USDC", "ALL")`
+
+- `await ct.show(swap,token)`
+
+  Shows on a certain exchange the balance of a token.
+  - `swap`: What swap (location) do you want to use. _(required)_<br/>
+    Lookup in `config.json` at `swap`-_{chain-name}_.
+  - `token`: Token name. _(required)_<br/>
+    Lookup in `config.json` at `token`-_{chain-name}_.
+
+  Return: The balance of the token.
+
+  Example: `let balance = await ct.show("DFK","1USDC")`
 
 ### DFK functions
 - `await ct.dfk_stop_quests()`
