@@ -722,15 +722,11 @@ class CorpusTools {
   async dfk_stop_quests() { DEBUG=0
     console.log(this.INFO, '\nStop finished DefiKingdoms Quests Version 1')
 
-    let DFKQUEST,DFKQUEST2,SIGNER
+    let DFKQUEST,SIGNER
     try { // Connect with the contracts
       DFKQUEST = new ethers.Contract( 
         this.config.contract.Harmony.DFKQUEST.address, 
         require(this.config.contract.Harmony.DFKQUEST.abi), provider 
-      )
-      DFKQUEST2 = new ethers.Contract( 
-        this.config.contract.Harmony.DFKQUEST2.address, 
-        require(this.config.contract.Harmony.DFKQUEST2.abi), provider 
       )
       SIGNER = await DFKQUEST.connect(signer)
 
@@ -786,18 +782,13 @@ class CorpusTools {
   async dfk_stop_quests2() { 
     console.log(this.INFO, 'Stop finished DefiKingdoms Quests Version 2')
 
-    let DFKQUEST,DFKQUEST2,SIGNER,SIGNER2
+    let DFKQUEST,SIGNER
     try { // Connect with the contracts
       DFKQUEST = new ethers.Contract( 
-        this.config.contract.Harmony.DFKQUEST2.address, 
-        require(this.config.contract.Harmony.DFKQUEST.abi), provider 
-      )
-      DFKQUEST2 = new ethers.Contract( 
         this.config.contract.Harmony.DFKQUEST2.address, 
         require(this.config.contract.Harmony.DFKQUEST2.abi), provider 
       )
       SIGNER = await DFKQUEST.connect(signer)
-      SIGNER2 = await DFKQUEST2.connect(signer)
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
       console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
@@ -805,7 +796,7 @@ class CorpusTools {
     }
 
     try { // Show Quest info
-      let quests = await DFKQUEST2.getAccountActiveQuests(myaddress)
+      let quests = await DFKQUEST.getAccountActiveQuests(myaddress)
       if (DEBUG) console.log(this.INFO, "getAccountActiveQuests:", quests, '\n') 
       
       for (let q of quests) {
@@ -827,7 +818,7 @@ class CorpusTools {
         if (q.completeAtTime < Math.round(Date.now() / 1000)) { // If the quest is finished
           console.log(this.WARN,"  Finishing, patience...")
 
-          let response = await SIGNER2.completeQuest(q.heroes[0], this.config.callOptions.Harmony)
+          let response = await SIGNER.completeQuest(q.heroes[0], this.config.callOptions.Harmony)
           if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
           console.log("  Nonce: " + this.SUCCESS, response.nonce)
   
@@ -844,6 +835,7 @@ class CorpusTools {
       return
     }
   }
+
   async dfk_start_quest(address,stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
     let DFKQUEST,SIGNER
     try { // Connect with the contracts
@@ -928,17 +920,13 @@ class CorpusTools {
   }
 
   async dfk_start_quest2(address,stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
-    let DFKQUEST,DFKQUEST2,SIGNER
+    let DFKQUEST,SIGNER
     try { // Connect with the contracts
       DFKQUEST = new ethers.Contract( 
-        this.config.contract.Harmony.DFKQUEST.address, 
-        require(this.config.contract.Harmony.DFKQUEST.abi), provider 
-      )
-      DFKQUEST2 = new ethers.Contract( 
         this.config.contract.Harmony.DFKQUEST2.address, 
         require(this.config.contract.Harmony.DFKQUEST2.abi), provider 
       )
-      SIGNER = await DFKQUEST2.connect(signer)
+      SIGNER = await DFKQUEST.connect(signer)
     } catch (err) {
       if (DEBUG) console.error('\n', err, '\n')
       console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
@@ -952,7 +940,7 @@ class CorpusTools {
 
     let working_heroes = []
     try { // Get running quests
-      let quests = await DFKQUEST.getActiveQuests(myaddress)
+      let quests = await DFKQUEST.getAccountActiveQuests(myaddress)
       for (let quest of quests) {
         for (let hero of quest.heroes) {
           working_heroes.push( ethers.BigNumber.from(hero).toNumber() )
@@ -1022,7 +1010,7 @@ class CorpusTools {
   async dfk_start_quest_fisher(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
     console.log(this.INFO, '\nStart Fisher Quest')
     //await this.dfk_start_quest("0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
-    await this.dfk_start_quest2("0xadffd2a255b3792873a986895c6312e8fbacfc8b",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
+    await this.dfk_start_quest2("0xADFFD2A255B3792873a986895c6312e8FbacFc8B",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
   }
 
   async dfk_start_quest_gardener(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
