@@ -17,24 +17,57 @@
   },
 
   "contract": {
+    "WONE": { "address": "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a" },
+
+    "JEWEL":             { "address": "0x72cb10c6bfa5624dd07ef608027e366bd690048f", "abi": "./abi_DFKJEWEL.json" },
+    "XJEWEL":            { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to BANK" },
+    "DFKQUEST":          { "address": "0x5100bd31b822371108a0f63dcfb6594b9919eaf4", "abi": "./abi_DFKQUEST.json" },
+    "DFKBANK":           { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to xJEWEL" },
+    "DFKBANKER":         { "address": "0x3685ec75ea531424bbe67db11e07013abeb95f1e", "abi": "./abi_DFKBANKER.json" },
+    "DFKMASTERGARDENER": { "address": "0xdb30643c71ac9e2122ca0341ed77d09d5f99f924", "abi": "./abi_DFKMASTERGARDENER.json" },
+    "DFKHERO":           { "address": "0x5f753dcdf9b1ad9aabc1346614d1f4746fd6ce5c" },
+
+    "TRANQ":      { "address": "0xcf1709ad76a79d5a60210f23e81ce2460542a836", "abi": "./abi_TRANQ.json" },
+    "TRANQSTAKE": { "address": "0x55ae07bb8bae1501f9aebf35801b5699eae63bb7", "abi": "./abi_TRANQSTAKE.json" },
+    "TRANQLOCK":  { "address": "0xba20c40339bcda584985522da3f6e61c2cc1f96e", "abi": "./abi_TRANQLOCK.json" },
+
+    "VIPER":     { "address": "0xea589e93ff18b1a1f1e9bac7ef3e86ab62addc79", "abi": "./abi_VIPER.json" },
+    "VIPERSWAP": { "address": "0xf012702a5f0e54015362cbca26a26fc90aa832a3", "abi": "./abi_VIPERSWAP.json" },
+
+    "Harmony": {
+      "WONE": { "address": "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a", "abi": "./abi_GENTOKEN.json", "gasfeetoken": true },
+
+      "JEWEL":             { "address": "0x72cb10c6bfa5624dd07ef608027e366bd690048f", "abi": "./abi_DFKJEWEL.json" },
+      "XJEWEL":            { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to BANK" },
+      "DFKQUEST":          { "address": "0x5100bd31b822371108a0f63dcfb6594b9919eaf4", "abi": "./abi_DFKQUEST.json" },
+      "DFKQUEST2":         { "address": "0xAa9a289ce0565E4D6548e63a441e7C084E6B52F6", "abi": "./abi_DFKQUEST2.json" },
+      "DFKBANK":           { "address": "0xA9cE83507D872C5e1273E745aBcfDa849DAA654F", "abi": "./abi_DFKXJEWEL.json", "comment": "Is equal to xJEWEL" },
+      "DFKBANKER":         { "address": "0x3685ec75ea531424bbe67db11e07013abeb95f1e", "abi": "./abi_DFKBANKER.json" },
+      "DFKMASTERGARDENER": { "address": "0xdb30643c71ac9e2122ca0341ed77d09d5f99f924", "abi": "./abi_DFKMASTERGARDENER.json" },
+      "DFKHERO":           { "address": "0x5f753dcdf9b1ad9aabc1346614d1f4746fd6ce5c" },
+      "DFKSUMMON":         { "address": "0xf4d3aE202c9Ae516f7eb1DB5afF19Bf699A5E355" },
+      "DFKMEDITATION":     { "address": "0x0594D86b2923076a2316EaEA4E1Ca286dAA142C1" },
+  
+      "TRANQ":      { "address": "0xcf1709ad76a79d5a60210f23e81ce2460542a836", "abi": "./abi_TRANQ.json" },
+      "TRANQSTAKE": { "address": "0x55ae07bb8bae1501f9aebf35801b5699eae63bb7", "abi": "./abi_TRANQSTAKE.json" },
+      "TRANQLOCK":  { "address": "0xba20c40339bcda584985522da3f6e61c2cc1f96e", "abi": "./abi_TRANQLOCK.json" },
+  
+      "VIPER":     { "address": "0xea589e93ff18b1a1f1e9bac7ef3e86ab62addc79", "abi": "./abi_VIPER.json" },
+      "VIPERSWAP": { "address": "0xf012702a5f0e54015362cbca26a26fc90aa832a3", "abi": "./abi_VIPERSWAP.json" }
+    },
+
     "DFKCHAIN": {
-      "JEWEL":       { "address": "0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260", "abi": "./DFKCV/abi_token_Jewel.json", "gasfeetoken": true },
+      "JEWEL":       { "address": "0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260", "abi": "./abi_GENTOKEN.json", "gasfeetoken": true },
       "AVAX":        { "address": "0xB57B60DeBDB0b8172bb6316a9164bd3C695F133a", "abi": "./abi_GENTOKEN.json" },
-      "CRYSTAL":     { "address": "0x04b9dA42306B023f3572e106B11D82aAd9D32EBb", "abi": "./DFKCV/abi_token_Crystal.json" },
-      "WJEWEL":      { "address": "0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260", "abi": "./DFKCV/abi_token_Jewel.json" },
+      "CRYSTAL":     { "address": "0x04b9dA42306B023f3572e106B11D82aAd9D32EBb", "abi": "./abi_GENTOKEN.json" },
+      "xCRYSTAL":    { "address": "0x6e7185872bcdf3f7a6cbbe81356e50daffb002d2", "abi": "./abi_GENTOKEN.json" },
+      "WJEWEL":      { "address": "0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260", "abi": "./abi_GENTOKEN.json" },
+      "xJEWEL":      { "address": "0x77f2656d04E158f915bC22f07B779D94c1DC47Ff", "abi": "./abi_GENTOKEN.json" },
       "USDC":        { "address": "0x3AD9DFE640E1A9Cc1D9B0948620820D975c3803a", "abi": "./abi_GENTOKEN.json" },
-
-      "SWAPFACTORY": { "address": "0x794C07912474351b3134E6D6B3B7b3b4A07cbAAa", "abi": "./DFKCV/abi_swapfactory.json" },
-      "SWAPROUTER":  { "address": "0x3C351E1afdd1b1BC44e931E12D4E05D6125eaeCa", "abi": "./DFKCV/abi_swaprouter.json" },
-      "QUESTCOREV2": { "address": "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154", "abi": "./DFKCV/abi_QuestCoreV2.1.json" },
-      "QUESTREWARDER":{"address": "0x08D93Db24B783F8eBb68D7604bF358F5027330A6", "abi": "" },
-      "QUESTFUND":   { "address": "0x08D93Db24B783F8eBb68D7604bF358F5027330A6", "abi": "" },
-      "GARDENER":    { "address": "0x57Dec9cC7f492d6583c773e2E7ad66dcDc6940Fb", "abi": "./DFKCV/abi_MasterGardenerDFK.json" },
-      "xJEWEL":      { "address": "0x77f2656d04E158f915bC22f07B779D94c1DC47Ff", "abi": "" },
-      "xCRYSTAL":    { "address": "0x6e7185872bcdf3f7a6cbbe81356e50daffb002d2", "abi": "./DFKCV/abi_Bank.json" },
-      "BANKER":      { "address": "0x4b1F4C7981465F814c4A78d79be21558A60f57F2", "abi": "./DFKCV/abi_Banker.json" },
-      "HEROCORE":    { "address": "0xEb9B61B145D6489Be575D3603F4a704810e143dF", "abi": "./DFKCV/abi_HeroCore.json" },
-
+      "SWAPFACTORY": { "address": "0x794C07912474351b3134E6D6B3B7b3b4A07cbAAa" },
+      "SWAPROUTER":  { "address": "0x3C351E1afdd1b1BC44e931E12D4E05D6125eaeCa", "abi": "./abi_DFKCHAIN_SWAPROUTER.json" },
+      "GARDEN":      { "address": "0x57Dec9cC7f492d6583c773e2E7ad66dcDc6940Fb" },
+      "JEWELER":     { "address": "0xe4911B47ff0a1cbF5A4edDaC58fbc48ae09c8993" },
       "PROXY":       { "address": "0x123165B3a30fdA3655B30cfC10135C1CA3C21bFC" },
       "AIRDROP":     { "address": "0x63e65a9dda6c2b049f55bee247544a256149db42" }
     }
@@ -107,13 +140,10 @@
       "0xa8589d575aed9c6dc12c860867c5348791d2d097": { "app": "DFK-SD", "name": "JEWEL-KURO", "decimals":18 }
     },
     "DFKCHAIN": {
-      "0x6AC38A4C112F125eac0eBDbaDBed0BC8F4575d0d": { "app": "DFKCV", "pid": 0, "name": "wJEWEL-xJEWEL" },
-      "0x9f378F48d0c1328fd0C80d7Ae544C6CadB5Ba99E": { "app": "DFKCV", "pid": 1, "name": "CRYSTAL-AVAX" },
-      "0x48658E69D741024b4686C8f7b236D3F1D291f386": { "app": "DFKCV", "pid": 2, "name": "CRYSTAL-wJEWEL" },
-      "0x04Dec678825b8DfD2D0d9bD83B538bE3fbDA2926": { "app": "DFKCV", "pid": 3, "name": "CRYSTAL-USDC" },
-      "0x7d4daa9eB74264b082A92F3f559ff167224484aC": { "app": "DFKCV", "pid": 4, "name": "ETH-USDC" },
-      "0xCF329b34049033dE26e4449aeBCb41f1992724D3": { "app": "DFKCV", "pid": 5, "name": "wJEWEL-USDC" },
-      "0x78C893E262e2681Dbd6B6eBA6CCA2AaD45de19AD": { "app": "DFKCV", "pid": 6, "name": "CRYSTAL-ETH" }
+      "0x6AC38A4C112F125eac0eBDbaDBed0BC8F4575d0d": { "app": "DFK-CV", "name": "JEWEL-xJEWEL" },
+      "0x48658E69D741024b4686C8f7b236D3F1D291f386": { "app": "DFK-CV", "name": "JEWEL-CRYSTAL" },
+      "0xF3EabeD6Bd905e0FcD68FC3dBCd6e3A4aEE55E98": { "app": "DFK-CV", "name": "JEWEL-AVAX" },
+      "0x9f378F48d0c1328fd0C80d7Ae544C6CadB5Ba99E": { "app": "DFK-CV", "name": "CRYSTAL-AVAX" }
     }
   },
 
@@ -123,30 +153,6 @@
     },
     "DFKCHAIN": {
       "CRYSTAL-USDC": "0x04Dec678825b8DfD2D0d9bD83B538bE3fbDA2926"
-    }
-  },
-
-  "quests": {
-    "DFKCHAIN": {
-      "0x98b3C85ac3cC3EF36Ff25A9229857AbACE3e7410": "Crystal Mining",
-      "0x407ab39B3675f29A719476af6eb3B9E5d93969E6": "Fishing",
-      "0xAd51199B453075C73FA106aFcAAD59f705EF7872": "Foraging",
-      "0x75912145f5cFEfb980616FA47B2f103210FaAb94": "Gold Mining",
-      "0xd3d8ff8e42C2eD51FabE4BA34080C6ac79395f24": "Gardening (0) wJEWEL-xJEWEL",
-      "0x8eDA0ceA7a90E794B33708Cc0768727A1A612f3d": "Gardening (1) CRYSTAL-AVAX",
-      "0xC4839Fb9A5466878168EaE3fD58c647B71475b61": "Gardening (2) CRYSTAL-wJEWEL",
-      "0x6FEF23498877bC4c3940ebE121dd7D138BdA4e11": "Gardening (3) CRYSTAL-USDC",
-      "0xdeF7cBeE7d0B62037616ee26BCAc1C8364f53476": "Gardening (4) ETH-USDC",
-      "0xaac3933Faa3B668304C9276d10CA88853463BD42": "Gardening (5) wJEWEL-USDC",
-      "0x810e1fF51fDd58c474c66A31013713D1A17BF458": "Gardening (6) CRYSTAL-ETH",
-      "0xb8828c687Fb1C875D5acb4281C5CDf9F49fA4637": "Tug of War (Strength)",
-      "0xD8cCf866959830a8E397442B5F7DDD790F230962": "Tafl Match (Intelligence)",
-      "0x0832A218c2202088A1800D424248fC689ae74600": "Animal Handling (Wisdom)",
-      "0x81fA8a2bfcd703dc83c5d4bEE1075899448A5CdE": "Catching Emberlings (Luck)",
-      "0x801b7296f106d8818DA1D04Ed769e5a76e8911fe": "Log Rolling (Agility)",
-      "0xE3edf52D33F2BB05DBdA5BA73903E27a9B9b7e9d": "Polar Plunge (Vitality)",
-      "0xBD391e4641E1bce989a246602EcDC746efA9d845": "Hunting Party (Endurance)",
-      "0x9ec92963d0387bA57D5f2D505319b1c135C6f1D3": "Stick and Ball (Dexterity)"
     }
   },
 
