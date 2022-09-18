@@ -1025,6 +1025,157 @@ class CorpusTools {
   /*********************
   ***    DFK - CV    ***
   **********************/
+  async dfkcv_stop_quests() { 
+    console.log(this.INFO, 'Stop finished DFK Quests')
+
+    let DFKQUEST,SIGNER
+    try { // Connect with the contracts
+      DFKQUEST = new ethers.Contract( 
+        this.config.contract.DFKCHAIN.QUESTCOREV2.address, 
+        require(this.config.contract.DFKCHAIN.QUESTCOREV2.abi), provider 
+      )
+      SIGNER = await DFKQUEST.connect(signer)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
+      return
+    }
+
+    try { // Show Quest info
+      let quests = await DFKQUEST.getAccountActiveQuests(myaddress)
+      if (DEBUG) console.log(this.INFO, "getAccountActiveQuests:", quests, '\n') 
+      
+      for (let q of quests) {
+        let quest_name = this.config.quests.DFKCHAIN[q.questAddress] // Try to translate to a name
+        if (!quest_name) quest_name = q.questAddress            // Unknown quest name
+
+        let heroes = "" // Make a list of the heroes in the quest
+        q.heroes.forEach( (h) => {
+          heroes += h + "  "
+        })
+
+        // Show info about the running
+        console.log("  Quest:       " + this.SUCCESS, quest_name)
+        console.log("  Heroes:      " + this.SUCCESS, heroes)
+        console.log("  Start time:  " + this.SUCCESS, this.displayTime(q.startAtTime * 1000))
+        console.log("  Finished at: " + this.SUCCESS, this.displayTime(q.completeAtTime * 1000))
+        //console.log("  Attemps:     " + this.SUCCESS, q.attempts)
+
+        if (q.completeAtTime < Math.round(Date.now() / 1000)) { // If the quest is finished
+          console.log(this.WARN,"  Finishing, patience...")
+
+          let response = await SIGNER.completeQuest(q.heroes[0], this.config.callOptions.Harmony)
+          if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+          console.log("  Nonce: " + this.SUCCESS, response.nonce)
+  
+          let receipt = await response.wait()
+          if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
+          console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+        }
+        console.log(" ")
+      }
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to stop the quests')
+      return
+    }
+  }
+  async dfkcv_start_quest(address,stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
+    let DFKQUEST,SIGNER
+    try { // Connect with the contracts
+      DFKQUEST = new ethers.Contract( 
+        this.config.contract.DFKCHAIN.QUESTCOREV2.address, 
+        require(this.config.contract.DFKCHAIN.QUESTCOREV2.abi), provider 
+      )
+      SIGNER = await DFKQUEST.connect(signer)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to connect with a contract')
+      return
+    }
+
+    if (stamina < 5)  { console.error(this.WARN, 'WARNING: Start the quest with less then 5 stamina is not really usefull'); return }
+    if (stamina > 30) { console.error(this.WARN, 'WARNING: Start the quest when there is more then 30 stamina, means it probably will never start'); return }
+    if (attempts < 1) { console.error(this.WARN, 'WARNING: Minimal 1 attempt'); return }
+    if ( !hero1 )     { console.error(this.WARN, 'WARNING: There are no heroes for this quest'); return }
+
+    let working_heroes = []
+    try { // Get running quests
+      let quests = await DFKQUEST.getAccountActiveQuests(myaddress)
+      for (let quest of quests) {
+        for (let hero of quest.heroes) {
+          working_heroes.push( ethers.BigNumber.from(hero).toNumber() )
+        }
+      }
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to request for the running quests')
+      return
+    }
+
+    let heroes = [hero1,hero2,hero3,hero4,hero5,hero6]
+    heroes = heroes.filter(Number) // Filter empty elements
+    try {
+      for (let hero of heroes) { // Check the stamina of each hero to find out
+        if (hero) {
+          if (working_heroes.includes(hero)) {
+            console.log(this.RED, "Hero " + hero + " is still at work.")
+            return
+          }
+          let currentstamina = await DFKQUEST.getCurrentStamina(hero)
+          currentstamina = ethers.BigNumber.from(currentstamina).toNumber()
+          if (currentstamina < stamina) {
+            console.log(this.RED, "No time yet for hero " + hero, "Stamina:", currentstamina, "Wait for:", stamina)
+            return
+          }
+          console.log("  Stamina of hero " + hero + ": " + this.SUCCESS, currentstamina)
+        }
+      }
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to request for the current stamina')
+      return
+    }
+
+    // We are still here? Then it means we can start the quest !
+    console.log("  Quest:    " + this.SUCCESS, this.config.quests.DFKCHAIN[address], "("+address+")")
+    console.log("  Heroes:   " + this.SUCCESS, heroes)
+    console.log("  Attempts: " + this.SUCCESS, attempts)
+    
+    console.log(this.WARN,"  Starting, patience...")
+    try {
+      let response = await SIGNER.startQuest(
+        heroes,
+        address,
+        attempts,
+        0,
+        this.config.callOptions.Harmony)
+      if (DEBUG) console.log(this.INFO, 'response:', response, '\n')
+      console.log("  Nonce: " + this.SUCCESS, response.nonce)
+
+      let receipt = await response.wait()
+      if (DEBUG) console.log(this.INFO, 'receipt:', receipt, '\n')
+      console.log("  Transaction: " + this.SUCCESS, receipt.transactionHash)
+    } catch (err) {
+      if (DEBUG) console.error('\n', err, '\n')
+      console.error(this.ERROR, 'ERROR: Problem to start the quest')
+      return
+    }
+  }
+  async dfkcv_start_quest_fisher(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
+    console.log(this.INFO, '\nStart Fishing Quest')
+    await this.dfkcv_start_quest("0x407ab39B3675f29A719476af6eb3B9E5d93969E6",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
+  }
+  async dfkcv_start_quest_forager(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
+    console.log(this.INFO, '\nStart Foraging Quest')
+    await this.dfkcv_start_quest("0xAd51199B453075C73FA106aFcAAD59f705EF7872",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
+  }
+  async dfkcv_start_quest_crystal(stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6) {
+    console.log(this.INFO, '\nStart Crystal Mining Quest')
+    await this.dfkcv_start_quest("0x98b3C85ac3cC3EF36Ff25A9229857AbACE3e7410",stamina,attempts,hero1,hero2,hero3,hero4,hero5,hero6)
+  }
+
   async dfkcv_harvest() { 
     console.log(this.INFO, '\nDFK Crystalvale Harvest')
     try{
